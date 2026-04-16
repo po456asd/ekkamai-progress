@@ -376,10 +376,7 @@
       min-height: 72px; outline: none; cursor: text;
       white-space: pre-wrap;
     }
-    .note-body:empty::before {
-      content: attr(data-placeholder);
-      color: var(--dim); font-style: italic; pointer-events: none;
-    }
+    .note-body { user-select: text; }
     @media (max-width: 900px) {
       .notes-grid { grid-template-columns: 1fr; }
     }
@@ -466,23 +463,20 @@
 <div class="notes-section">
   <div class="notes-top">
     <div class="notes-title">Weekly Notes</div>
-    <div class="notes-hint">Click any field to edit · Auto-saved in browser</div>
+    <div class="notes-hint" id="notesPeriod"></div>
   </div>
   <div class="notes-grid">
     <div class="note-card n-done">
       <div class="note-label">✅ &nbsp;This Week's Work</div>
-      <div class="note-body" id="noteWork" contenteditable="true"
-           data-placeholder="What was done this week…"></div>
+      <div class="note-body" id="noteWork"></div>
     </div>
     <div class="note-card n-issue">
       <div class="note-label">⚠️ &nbsp;Issues &amp; Problems</div>
-      <div class="note-body" id="noteIssues" contenteditable="true"
-           data-placeholder="Problems encountered this week…"></div>
+      <div class="note-body" id="noteIssues"></div>
     </div>
     <div class="note-card n-prev">
       <div class="note-label">🔄 &nbsp;Updates from Last Week</div>
-      <div class="note-body" id="noteLastWeek" contenteditable="true"
-           data-placeholder="What changed or was resolved from last week…"></div>
+      <div class="note-body" id="noteLastWeek"></div>
     </div>
   </div>
 </div>
@@ -684,37 +678,66 @@ let barChartInst = null;
 let radarChartInst = null;
 
 /* ═══════════════════════════════════════════════════════════
+   WEEKLY NOTES DATA
+   — Updated by Claude each time new info is provided
+   — cutoff: every Monday
+═══════════════════════════════════════════════════════════ */
+const NOTES = {
+  cutoff: "2026-04-14",   // Monday of current week (YYYY-MM-DD)
+  thisWeek: [
+    "Structure: All floor slabs complete on both buildings — only roof slab remaining (both buildings)",
+    "Architecture Bldg A: Floors 2–4 brick walls complete; Floor 3 lightweight partition walls done, floor leveling in progress",
+    "Architecture Bldg B: Floors 2–4 brick walls complete, Floor 5 brick walls in progress; Floor 2 skim coat done on ~3 rooms",
+    "MEP Bldg A Floor 2: Electrical 85% done (riser + guest room wiring + corridor); Plumbing 40% done",
+    "MEP Bldg B Floor 2: Electrical 75% done (riser + guest room wiring, corridor remaining); Plumbing 75% done",
+    "MEP vertical routing: Fire suppression reached FL5, Riser reached FL6, Water supply reached FL3 (pending pressure test), Refrigerant pipe reached FL3",
+    "Swimming pool (Roof): Surge tank installed",
+  ],
+  issues: [
+    "FL2 both buildings — HVAC: AC units installed with wrong spec on entire floor, work stopped pending correction",
+    "Basement (both buildings): No work possible — area not yet cleared",
+    "Floor 1 (both buildings): No work possible — currently used as site office",
+    "Bldg A FL2 — Plumbing: Bathroom plumbing incomplete",
+  ],
+  lastWeek: [
+    "Progress data updated from placeholder values to actual site data",
+    "MEP tracking upgraded: added separate Done / Tested tracking per system",
+    "Architecture scope confirmed: Guest Bathroom included in all hotel room floors",
+  ]
+};
+
+/* ═══════════════════════════════════════════════════════════
+   RENDER NOTES
+═══════════════════════════════════════════════════════════ */
+function renderNotes(){
+  const cutoff = new Date(NOTES.cutoff + 'T00:00:00');
+  const weekEnd = new Date(cutoff);
+  weekEnd.setDate(cutoff.getDate() + 6);
+  const fmt = d => d.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
+  document.getElementById('notesPeriod').textContent =
+    'Week of ' + fmt(cutoff) + ' – ' + fmt(weekEnd);
+
+  const render = (id, items) => {
+    document.getElementById(id).innerHTML = items.length
+      ? items.map(t=>`<div style="display:flex;gap:8px;margin-bottom:6px"><span style="color:var(--gold-d);flex-shrink:0">›</span><span>${t}</span></div>`).join('')
+      : `<span style="color:var(--dim);font-style:italic">No updates this week</span>`;
+  };
+  render('noteWork',     NOTES.thisWeek);
+  render('noteIssues',   NOTES.issues);
+  render('noteLastWeek', NOTES.lastWeek);
+}
+
+/* ═══════════════════════════════════════════════════════════
    INIT
 ═══════════════════════════════════════════════════════════ */
-/* ═══════════════════════════════════════════════════════════
-   WEEKLY NOTES — auto-save to localStorage
-═══════════════════════════════════════════════════════════ */
-const NOTE_KEYS = ['noteWork','noteIssues','noteLastWeek'];
-
-function saveNotes(){
-  NOTE_KEYS.forEach(id=>{
-    localStorage.setItem('qhe_' + id, document.getElementById(id).innerHTML);
-  });
-}
-function loadNotes(){
-  NOTE_KEYS.forEach(id=>{
-    const saved = localStorage.getItem('qhe_' + id);
-    if(saved) document.getElementById(id).innerHTML = saved;
-  });
-  NOTE_KEYS.forEach(id=>{
-    document.getElementById(id).addEventListener('input', saveNotes);
-  });
-}
-
 window.addEventListener('DOMContentLoaded', () => {
-  // Set today's date in date input
   const today = new Date();
   document.getElementById('inputDate').value = today.toISOString().split('T')[0];
   updateHeader();
 
   document.getElementById('inputDate').addEventListener('input', updateHeader);
 
-  loadNotes();
+  renderNotes();
   renderKPIs();
   renderBuilding();
   renderCharts();
