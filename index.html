@@ -337,6 +337,53 @@
       border-radius: 14px; padding: 24px;
     }
 
+    /* ── WEEKLY NOTES ── */
+    .notes-section {
+      background: var(--bg2);
+      border-bottom: 1px solid var(--border);
+      padding: 20px 40px;
+    }
+    .notes-top {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 14px;
+    }
+    .notes-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 15px; color: var(--gold); letter-spacing: 1px;
+    }
+    .notes-hint {
+      font-size: 9px; color: var(--dim); letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+    .notes-grid {
+      display: grid; grid-template-columns: repeat(3,1fr); gap: 14px;
+    }
+    .note-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 10px; padding: 14px 16px;
+      transition: border-color .2s;
+    }
+    .note-card:focus-within { border-color: var(--gold-d); }
+    .note-card.n-issue  { border-left: 3px solid var(--orange); }
+    .note-card.n-done   { border-left: 3px solid var(--green); }
+    .note-card.n-prev   { border-left: 3px solid var(--blue); }
+    .note-label {
+      font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 10px;
+    }
+    .note-body {
+      font-size: 12px; color: var(--text); line-height: 1.75;
+      min-height: 72px; outline: none; cursor: text;
+      white-space: pre-wrap;
+    }
+    .note-body:empty::before {
+      content: attr(data-placeholder);
+      color: var(--dim); font-style: italic; pointer-events: none;
+    }
+    @media (max-width: 900px) {
+      .notes-grid { grid-template-columns: 1fr; }
+    }
+
     /* ── FOOTER ── */
     footer {
       border-top: 1px solid var(--border);
@@ -413,6 +460,31 @@
   <input type="date" id="inputDate" style="width:140px" />
   <div class="sep">|</div>
   <span style="color:var(--dim)">Edit date above to update the report header</span>
+</div>
+
+<!-- ══════════ WEEKLY NOTES ══════════ -->
+<div class="notes-section">
+  <div class="notes-top">
+    <div class="notes-title">Weekly Notes</div>
+    <div class="notes-hint">Click any field to edit · Auto-saved in browser</div>
+  </div>
+  <div class="notes-grid">
+    <div class="note-card n-done">
+      <div class="note-label">✅ &nbsp;This Week's Work</div>
+      <div class="note-body" id="noteWork" contenteditable="true"
+           data-placeholder="What was done this week…"></div>
+    </div>
+    <div class="note-card n-issue">
+      <div class="note-label">⚠️ &nbsp;Issues &amp; Problems</div>
+      <div class="note-body" id="noteIssues" contenteditable="true"
+           data-placeholder="Problems encountered this week…"></div>
+    </div>
+    <div class="note-card n-prev">
+      <div class="note-label">🔄 &nbsp;Updates from Last Week</div>
+      <div class="note-body" id="noteLastWeek" contenteditable="true"
+           data-placeholder="What changed or was resolved from last week…"></div>
+    </div>
+  </div>
 </div>
 
 <!-- ══════════ MAIN ══════════ -->
@@ -614,6 +686,26 @@ let radarChartInst = null;
 /* ═══════════════════════════════════════════════════════════
    INIT
 ═══════════════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════
+   WEEKLY NOTES — auto-save to localStorage
+═══════════════════════════════════════════════════════════ */
+const NOTE_KEYS = ['noteWork','noteIssues','noteLastWeek'];
+
+function saveNotes(){
+  NOTE_KEYS.forEach(id=>{
+    localStorage.setItem('qhe_' + id, document.getElementById(id).innerHTML);
+  });
+}
+function loadNotes(){
+  NOTE_KEYS.forEach(id=>{
+    const saved = localStorage.getItem('qhe_' + id);
+    if(saved) document.getElementById(id).innerHTML = saved;
+  });
+  NOTE_KEYS.forEach(id=>{
+    document.getElementById(id).addEventListener('input', saveNotes);
+  });
+}
+
 window.addEventListener('DOMContentLoaded', () => {
   // Set today's date in date input
   const today = new Date();
@@ -622,6 +714,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   document.getElementById('inputDate').addEventListener('input', updateHeader);
 
+  loadNotes();
   renderKPIs();
   renderBuilding();
   renderCharts();
