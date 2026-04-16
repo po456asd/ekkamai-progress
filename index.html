@@ -429,6 +429,25 @@
     .mat-section {
       max-width: 1600px; margin: 0 auto; padding: 30px 40px;
     }
+    .mat-filter-bar {
+      display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px;
+    }
+    .mat-filter {
+      padding: 6px 16px; border-radius: 20px; font-size: 11px;
+      font-weight: 600; letter-spacing: 1px; cursor: pointer;
+      border: 1px solid var(--border); background: var(--card);
+      color: var(--muted); transition: all .2s;
+    }
+    .mat-filter.active {
+      background: linear-gradient(135deg, var(--gold-d), var(--gold));
+      color: #08050a; border-color: var(--gold);
+    }
+    .mat-filter:hover:not(.active) { border-color: var(--gold-d); color: var(--text); }
+    .mat-cat-header {
+      font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+      color: var(--gold-d); margin: 24px 0 12px;
+      padding-bottom: 8px; border-bottom: 1px solid var(--border);
+    }
     .mat-timeline-wrap {
       background: var(--card); border: 1px solid var(--border);
       border-radius: 14px; padding: 28px; margin-bottom: 24px;
@@ -715,10 +734,14 @@
 <!-- ══════════ MATERIALS PAGE ══════════ -->
 <div class="mat-page" id="materialsPage">
   <div class="mat-section">
-    <div style="margin-bottom:20px">
-      <div style="font-family:'Playfair Display',serif;font-size:22px;color:var(--text);margin-bottom:4px">Material Delivery Schedule</div>
-      <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted)">The Quarter Hotel Ekkamai · All Buildings</div>
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:20px;flex-wrap:wrap;gap:12px">
+      <div>
+        <div style="font-family:'Playfair Display',serif;font-size:22px;color:var(--text);margin-bottom:4px">Material Delivery Schedule</div>
+        <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted)">The Quarter Hotel Ekkamai · All Buildings</div>
+      </div>
+      <div id="matSummaryBadges" style="display:flex;gap:10px;flex-wrap:wrap"></div>
     </div>
+    <div class="mat-filter-bar" id="matFilters"><!-- Populated by JS --></div>
     <div id="matList"><!-- Populated by JS --></div>
   </div>
 </div>
@@ -826,6 +849,148 @@ const MATERIALS = [
       { date: "2026-05-30", qty: "", note: "" },
       { date: "2026-06-01", qty: "", note: "" },
     ]
+  },
+  {
+    name: "Generator Set",
+    category: "MEP — Electrical",
+    supplier: "CYT",
+    contact: "K. Phai",
+    tel: "-",
+    dates: [
+      { date: "2026-05-15", qty: "", note: "" },
+    ]
+  },
+  {
+    name: "MDB & EMDB",
+    category: "MEP — Electrical",
+    supplier: "KT",
+    contact: "K. Shetsak",
+    tel: "098-830-4595",
+    dates: []
+  },
+  {
+    name: "DB Panel",
+    category: "MEP — Electrical",
+    supplier: "KT",
+    contact: "K. Shetsak",
+    tel: "098-830-4595",
+    dates: []
+  },
+  {
+    name: "Consumer Unit",
+    category: "MEP — Electrical",
+    supplier: "KT",
+    contact: "K. Shetsak",
+    tel: "098-830-4595",
+    dates: []
+  },
+  {
+    name: "Switch & Outlet",
+    category: "MEP — Electrical",
+    supplier: "Marvel",
+    contact: "K. Neuy",
+    tel: "093-590-9556",
+    dates: []
+  },
+  {
+    name: "RCU & Keycard",
+    category: "MEP — Electrical",
+    supplier: "Master Control",
+    contact: "K. Lin",
+    tel: "086-324-0614",
+    dates: []
+  },
+  {
+    name: "Light Fixture",
+    category: "MEP — Electrical",
+    supplier: "Sahasawat",
+    contact: "K. Nee",
+    tel: "088-786-0297",
+    dates: [
+      { date: "2026-01-15", qty: "", note: "" },
+      { date: "2026-04-15", qty: "", note: "" },
+      { date: "2026-05-15", qty: "", note: "" },
+    ]
+  },
+  {
+    name: "Central Battery & Emergency Downlight",
+    category: "MEP — Electrical",
+    supplier: "Sahasawat",
+    contact: "K. Nee",
+    tel: "088-786-0297",
+    dates: []
+  },
+  {
+    name: "Emergency & Exit Light",
+    category: "MEP — Electrical",
+    supplier: "Sahasawat",
+    contact: "K. Nee",
+    tel: "088-786-0297",
+    dates: []
+  },
+  {
+    name: "Computer & Server Network",
+    category: "MEP — Electrical",
+    supplier: "Phatshat",
+    contact: "K. Phat",
+    tel: "084-652-9479",
+    dates: []
+  },
+  {
+    name: "WiFi + Digital TV",
+    category: "MEP — Electrical",
+    supplier: "Phatshat",
+    contact: "K. Phat",
+    tel: "084-652-9479",
+    dates: []
+  },
+  {
+    name: "CCTV",
+    category: "MEP — Electrical",
+    supplier: "By Owner",
+    contact: "K. Tum",
+    tel: "-",
+    dates: []
+  },
+  {
+    name: "Hot Water Pump",
+    category: "MEP — Plumbing",
+    supplier: "Heismann",
+    contact: "K. Thatyawutt",
+    tel: "089-895-4236",
+    dates: []
+  },
+  {
+    name: "Hot Water Tank",
+    category: "MEP — Plumbing",
+    supplier: "Heismann",
+    contact: "K. Thatyawutt",
+    tel: "089-895-4236",
+    dates: []
+  },
+  {
+    name: "Hot Water Return Pump",
+    category: "MEP — Plumbing",
+    supplier: "Heismann",
+    contact: "K. Thatyawutt",
+    tel: "089-895-4236",
+    dates: []
+  },
+  {
+    name: "Swimming Pool",
+    category: "Architecture",
+    supplier: "Nara",
+    contact: "K. Suphaporn",
+    tel: "081-641-4941",
+    dates: []
+  },
+  {
+    name: "Kitchen Equipment",
+    category: "Interior — FF&E",
+    supplier: "SD Stainless",
+    contact: "K. Shinnawattra",
+    tel: "086-341-9410",
+    dates: []
   },
 ];
 
@@ -1035,9 +1200,49 @@ function renderMaterials(){
     }).join('')}</div>`;
   }
 
-  document.getElementById('matList').innerHTML = MATERIALS.map(mat => {
-    const total = mat.dates.length;
-    const arrived = mat.dates.filter(d => statusOf(d.date) === 'arrived').length;
+  // Build filter buttons
+  const allCats = ['All', ...new Set(MATERIALS.map(m => m.category))];
+  let activeCat = 'All';
+  function buildFilters(){
+    document.getElementById('matFilters').innerHTML = allCats.map(c =>
+      `<button class="mat-filter${c===activeCat?' active':''}" onclick="setMatFilter('${c}')">${c}</button>`
+    ).join('');
+  }
+  window.setMatFilter = function(cat){
+    activeCat = cat;
+    buildFilters();
+    buildMatList();
+  };
+
+  // Summary badges (total items, items with dates, arrived)
+  const totalItems = MATERIALS.length;
+  const withDates  = MATERIALS.filter(m=>m.dates.length>0).length;
+  const arrivedAll = MATERIALS.reduce((s,m)=>s+m.dates.filter(d=>statusOf(d.date)==='arrived').length,0);
+  const totalDels  = MATERIALS.reduce((s,m)=>s+m.dates.length,0);
+  document.getElementById('matSummaryBadges').innerHTML = [
+    ['Total Items', totalItems, 'var(--muted)'],
+    ['Scheduled', withDates, 'var(--gold)'],
+    ['Delivered', arrivedAll+'/'+totalDels, 'var(--green)'],
+  ].map(([l,v,c])=>`<div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px 16px;text-align:center">
+    <div style="font-size:18px;font-weight:700;color:${c};font-family:'Playfair Display',serif">${v}</div>
+    <div style="font-size:9px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-top:2px">${l}</div>
+  </div>`).join('');
+
+  function buildMatList(){
+    const filtered = activeCat === 'All' ? MATERIALS : MATERIALS.filter(m=>m.category===activeCat);
+    // Group by category
+    const groups = {};
+    filtered.forEach(m=>{
+      if(!groups[m.category]) groups[m.category]=[];
+      groups[m.category].push(m);
+    });
+
+    document.getElementById('matList').innerHTML = Object.entries(groups).map(([cat, items])=>{
+      const catHeader = activeCat === 'All'
+        ? `<div class="mat-cat-header">${cat}</div>` : '';
+      const cards = items.map(mat => {
+        const total = mat.dates.length;
+        const arrived = mat.dates.filter(d => statusOf(d.date) === 'arrived').length;
 
     const rows = mat.dates.map(d => {
       const dt = new Date(d.date + 'T00:00:00');
@@ -1056,21 +1261,35 @@ function renderMaterials(){
       </div>`;
     }).join('');
 
+    const noDateMsg = total === 0
+      ? `<div style="color:var(--dim);font-style:italic;font-size:12px;padding:8px 0">No delivery dates scheduled yet</div>` : '';
+
     return `<div class="mat-timeline-wrap">
       <div class="mat-top">
         <div>
           <div class="mat-item-name">${mat.name}</div>
-          <div class="mat-supplier">Supplier: <span>${mat.supplier}</span> &nbsp;·&nbsp; Tel: <span>${mat.tel}</span> &nbsp;·&nbsp; <span style="color:var(--muted)">${mat.category}</span></div>
+          <div class="mat-supplier">
+            Supplier: <span>${mat.supplier}</span>
+            &nbsp;·&nbsp; Contact: <span>${mat.contact || '—'}</span>
+            &nbsp;·&nbsp; Tel: <span>${mat.tel}</span>
+            &nbsp;·&nbsp; <span style="color:var(--muted)">${mat.category}</span>
+          </div>
         </div>
         <div class="mat-total-badge">
-          <div class="tb-num">${arrived}/${total}</div>
+          <div class="tb-num">${total > 0 ? arrived+'/'+total : '—'}</div>
           <div class="tb-label">Deliveries</div>
         </div>
       </div>
-      <div class="delivery-timeline">${rows}</div>
-      ${buildCalStrip(mat.dates)}
+      ${noDateMsg}
+      ${total > 0 ? `<div class="delivery-timeline">${rows}</div>${buildCalStrip(mat.dates)}` : ''}
     </div>`;
-  }).join('');
+      }).join('');
+      return catHeader + cards;
+    }).join('');
+  }
+
+  buildFilters();
+  buildMatList();
 }
 
 /* ═══════════════════════════════════════════════════════════
