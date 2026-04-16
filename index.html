@@ -573,11 +573,170 @@
     @media (max-width: 1100px) {
       .kpi-row { grid-template-columns: 1fr 1fr; }
       .charts-row { grid-template-columns: 1fr; }
+      header { padding: 14px 24px; }
+      .edit-bar, .notes-section, .page-tabs, .mat-section { padding-left: 24px; padding-right: 24px; }
+      .wrap { padding: 24px; }
     }
+
+    /* Tablet / small landscape */
     @media (max-width: 760px) {
-      .bsect { grid-template-columns: 1fr; }
-      header { flex-direction: column; gap: 10px; }
-      .wrap { padding: 20px 16px; }
+      /* HEADER — stack vertically, center, smaller type */
+      header {
+        flex-direction: column; align-items: stretch;
+        gap: 6px; padding: 12px 14px; text-align: center;
+      }
+      .h-left, .h-center, .h-right { text-align: center; }
+      .h-left .company { font-size: 9px; letter-spacing: 2px; }
+      .h-left .proj { font-size: 16px; }
+      .h-center { order: -1; }
+      .h-center .rtitle { font-size: 9px; letter-spacing: 1.5px; margin-bottom: 0; }
+      .week-pill { display: none; }
+      .h-right { display: flex; justify-content: center; align-items: baseline; gap: 6px; flex-wrap: wrap; }
+      .h-right .rconsult { margin: 0; font-size: 9px; letter-spacing: 1px; }
+      .h-right .rconsult:last-child { display: none; } /* hide "Confidential" line on phone to save space */
+      .h-right .rdate { font-size: 12px; }
+
+      /* EDIT BAR */
+      .edit-bar { padding: 8px 14px; flex-wrap: wrap; gap: 10px; font-size: 10px; }
+      .edit-bar .sep { display: none; }
+      .edit-bar span { display: none; }
+
+      /* PAGE TABS — scrollable horizontal */
+      .page-tabs { padding: 0; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+      .page-tabs::-webkit-scrollbar { display: none; }
+      .ptab { padding: 12px 18px; font-size: 10px; letter-spacing: 1.5px; white-space: nowrap; flex-shrink: 0; }
+
+      /* NOTES */
+      .notes-section { padding: 14px 14px; }
+      .notes-top { flex-direction: column; align-items: flex-start; gap: 4px; margin-bottom: 12px; }
+      .notes-title { font-size: 14px; }
+      .notes-hint { font-size: 8px; }
+      .notes-grid { gap: 10px; }
+      .note-card { padding: 12px 14px; }
+      .note-label { font-size: 8px; letter-spacing: 1.5px; margin-bottom: 8px; }
+      .note-body { font-size: 11px; min-height: 0; line-height: 1.65; }
+      .backlog-item { font-size: 11px; padding: 6px 0; gap: 8px; }
+      .backlog-since { font-size: 8px; }
+      .backlog-count { font-size: 9px; padding: 2px 8px; }
+
+      /* WRAP */
+      .wrap { padding: 18px 14px; }
+
+      /* KPI */
+      .kpi-row { grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+      .kpi-card { padding: 14px 12px; border-radius: 12px; }
+      .kpi-head { font-size: 8px; letter-spacing: 1.5px; margin-bottom: 10px; }
+      .kpi-body { gap: 10px; }
+      .kpi-ring { width: 54px; height: 54px; }
+      .kpi-num { font-size: 12px; }
+      .kpi-pct { font-size: 20px; }
+      .kpi-sub { font-size: 9px; letter-spacing: .3px; }
+
+      .gold-line { margin: 18px 0; }
+
+      /* BUILDING TABS */
+      .btabs { gap: 8px; margin-bottom: 16px; }
+      .btab { padding: 9px 14px; font-size: 11px; letter-spacing: 1px; flex: 1; text-align: center; }
+
+      /* BUILDING SECTION */
+      .bsect { grid-template-columns: 1fr; gap: 18px; margin-bottom: 22px; }
+      .bdiag-wrap { max-width: 240px; margin: 0 auto; width: 100%; }
+      .bdiag-svg { max-width: 220px; margin: 0 auto; }
+      .bdiag-title { font-size: 9px; letter-spacing: 1.5px; }
+
+      /* FLOOR DETAIL */
+      .fdetail { padding: 18px 14px; border-radius: 12px; }
+      .fdetail-head { flex-direction: column; gap: 10px; align-items: flex-start; margin-bottom: 16px; padding-bottom: 14px; }
+      .fdetail-name { font-size: 18px; }
+      .fdetail-bld { font-size: 10px; }
+      .fdetail-overall { text-align: left; display: flex; align-items: baseline; gap: 10px; }
+      .fdetail-overall .ov-label { margin-bottom: 0; font-size: 9px; }
+      .fdetail-overall .ov-val { font-size: 26px; }
+
+      .pbar-item { margin-bottom: 14px; }
+      .pbar-label { font-size: 10px; letter-spacing: 1px; }
+      .pbar-pct { font-size: 13px; }
+      .pbar-track { height: 8px; }
+
+      .mep-sub { gap: 6px; }
+      .mep-chip { padding: 7px 4px; }
+      .mep-chip .mc-label { font-size: 7px; letter-spacing: .5px; }
+      .mep-chip .mc-val { font-size: 12px; }
+      .mep-chip .mc-tested { font-size: 8px; }
+
+      .spaces-sect { padding: 10px 12px; margin-bottom: 16px; }
+      .spaces-head { font-size: 8px; letter-spacing: 1.5px; }
+      .stag { font-size: 9px; padding: 3px 8px; }
+
+      /* MATRIX — scroll horizontal so all columns fit */
+      .matrix-wrap { padding: 16px 12px; border-radius: 12px; }
+      .sec-title { font-size: 15px; }
+      .sec-sub { font-size: 9px; letter-spacing: 1.5px; }
+      table.matrix {
+        display: block; overflow-x: auto; -webkit-overflow-scrolling: touch;
+        white-space: nowrap;
+      }
+      table.matrix thead, table.matrix tbody { display: table; width: 100%; min-width: 620px; }
+      .matrix th, .matrix td { padding: 7px 8px; font-size: 9px; }
+      .matrix td:first-child { font-size: 10px; padding-left: 10px; }
+      .matrix th:nth-child(2), .matrix td:nth-child(2) { display: none; } /* hide Spaces column on phone */
+      .mat-bar { height: 20px; min-width: 60px; }
+      .mat-pct { font-size: 9px; }
+      .mat-tested { font-size: 7px; }
+
+      /* CHARTS */
+      .charts-row { gap: 14px; margin-bottom: 20px; }
+      .chart-card { padding: 16px 12px; border-radius: 12px; }
+      .chart-card > div[style] { height: 220px !important; }
+
+      /* MATERIALS */
+      .mat-section { padding: 18px 14px; }
+      .mat-filter-bar { gap: 6px; margin-bottom: 18px; overflow-x: auto; flex-wrap: nowrap; padding-bottom: 6px; }
+      .mat-filter { padding: 5px 12px; font-size: 10px; white-space: nowrap; flex-shrink: 0; }
+      .mat-cat-header { font-size: 9px; letter-spacing: 2px; margin: 18px 0 10px; }
+      .mat-timeline-wrap { padding: 16px 14px; border-radius: 12px; }
+      .mat-top { flex-direction: column; gap: 12px; align-items: stretch; margin-bottom: 18px; padding-bottom: 14px; }
+      .mat-item-name { font-size: 16px; }
+      .mat-supplier { font-size: 10px; line-height: 1.6; }
+      .mat-total-badge { padding: 8px 14px; align-self: flex-start; }
+      .mat-total-badge .tb-num { font-size: 22px; }
+      .mat-total-badge .tb-label { font-size: 8px; }
+
+      .delivery-timeline { padding-left: 22px; }
+      .delivery-row { gap: 12px; margin-bottom: 14px; flex-wrap: wrap; align-items: flex-start; }
+      .del-dot { left: -20px; width: 10px; height: 10px; }
+      .del-date-block { min-width: 0; flex: 1 0 auto; }
+      .del-date { font-size: 13px; }
+      .del-day { font-size: 9px; }
+      .del-status { font-size: 8px; padding: 2px 8px; letter-spacing: 1px; }
+      .del-info { padding-top: 0; flex-basis: 100%; }
+      .del-note { font-size: 11px; }
+      .del-qty { font-size: 11px; padding: 3px 10px; }
+
+      /* CALENDAR */
+      .cal-strip { gap: 12px; margin-top: 14px; padding-top: 14px; }
+      .cal-month { min-width: 0; flex: 1 1 100%; }
+      .cal-month-name { font-size: 9px; letter-spacing: 1.5px; margin-bottom: 6px; }
+      .cal-day-hdr { font-size: 9px; }
+      .cal-day { font-size: 10px; padding: 6px 2px; }
+
+      footer { padding: 16px; font-size: 9px; line-height: 1.6; letter-spacing: 1px; }
+      footer span { display: block; margin-bottom: 2px; }
+    }
+
+    /* Small phones — single-column KPI + tighter spacing */
+    @media (max-width: 480px) {
+      .kpi-row { grid-template-columns: 1fr 1fr; gap: 8px; }
+      .kpi-card { padding: 12px 10px; }
+      .kpi-ring { width: 48px; height: 48px; }
+      .kpi-pct { font-size: 18px; }
+      .h-left .proj { font-size: 15px; }
+      .h-left .company { font-size: 8px; letter-spacing: 1.5px; }
+      .btab { padding: 8px 10px; font-size: 10px; letter-spacing: .5px; }
+      .fdetail-name { font-size: 16px; }
+      .fdetail-overall .ov-val { font-size: 22px; }
+      .sec-title { font-size: 14px; }
+      .mat-item-name { font-size: 15px; }
     }
 
     /* ── SPACES TAGS ── */
