@@ -584,7 +584,7 @@
       font-weight: 700; border: 1px solid var(--gold-d);
     }
     .cal-day.today-mark {
-      background: rgba(74,144,226,.15); color: var(--blue);
+      background: rgba(61,190,124,.15); color: var(--green);
     }
     .cal-day.empty { opacity: 0; }
 
@@ -1464,9 +1464,16 @@ function buildMasterCalendar(mats){
       const dateStr = year + '-' + String(month+1).padStart(2,'0') + '-' + String(d).padStart(2,'0');
       let cls = 'cal-day';
       const count = dateToCount[dateStr];
+
+      // Check if this is today
+      const isToday = today.getFullYear() === year && today.getMonth() === month && today.getDate() === d;
+
       if(count){
         cls += ' has-delivery';
         cells += `<div class="${cls}"><span>${d}</span><span class="mat-mc-count">${count}</span></div>`;
+      } else if(isToday){
+        cls += ' today-mark';
+        cells += `<div class="${cls}">${d}</div>`;
       } else {
         cells += `<div class="${cls}">${d}</div>`;
       }
