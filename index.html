@@ -604,6 +604,59 @@
       font-size: 8px; font-weight: 700;
       padding: 1px 5px; border-radius: 10px;
       margin-left: 2px; letter-spacing: .5px;
+      cursor: pointer;
+    }
+
+    /* Daily delivery details */
+    .mat-day-details {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 14px; padding: 20px 24px;
+      margin-bottom: 20px; animation: fadeUp .3s both;
+    }
+    .mat-day-details-head {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 16px; padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .mat-day-details-date {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px; font-weight: 700; color: var(--gold);
+    }
+    .mat-day-details-close {
+      background: none; border: none; color: var(--muted);
+      font-size: 20px; cursor: pointer; padding: 0; width: 24px; height: 24px;
+      display: flex; align-items: center; justify-content: center;
+      transition: color .2s;
+    }
+    .mat-day-details-close:hover { color: var(--text); }
+    .mat-day-details-list {
+      display: flex; flex-direction: column; gap: 12px;
+    }
+    .mat-day-supplier {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 10px; padding: 12px 14px;
+    }
+    .mat-day-supplier-name {
+      font-size: 13px; font-weight: 700; color: var(--text);
+      margin-bottom: 4px;
+    }
+    .mat-day-supplier-info {
+      font-size: 10px; color: var(--muted); line-height: 1.6;
+      letter-spacing: .5px;
+    }
+    .mat-day-supplier-status {
+      font-size: 9px; font-weight: 700; letter-spacing: 1px;
+      text-transform: uppercase; margin-top: 6px; display: inline-block;
+      padding: 2px 8px; border-radius: 12px;
+    }
+    .mat-day-supplier-status.arrived {
+      background: rgba(61,190,124,.15); color: var(--green);
+    }
+    .mat-day-supplier-status.upcoming {
+      background: rgba(201,168,76,.15); color: var(--gold);
+    }
+    .mat-day-supplier-status.future {
+      background: rgba(255,255,255,.05); color: var(--muted);
     }
 
     /* ── FOOTER ── */
@@ -632,6 +685,9 @@
 
       .mat-master-cal { padding: 18px; }
       .mat-master-cal .sec-title { font-size: 16px; }
+
+      .mat-day-details { padding: 16px 18px; margin-bottom: 16px; }
+      .mat-day-details-date { font-size: 18px; }
     }
 
     /* Tablet / small landscape */
@@ -751,6 +807,13 @@
       .mat-master-cal .sec-title { font-size: 14px; }
       .mat-master-cal .sec-sub { font-size: 8px; }
       .mat-mc-count { font-size: 7px; padding: 1px 4px; }
+
+      .mat-day-details { padding: 12px 14px; margin-bottom: 14px; border-radius: 12px; }
+      .mat-day-details-date { font-size: 16px; }
+      .mat-day-details-head { margin-bottom: 12px; }
+      .mat-day-supplier { padding: 10px 12px; }
+      .mat-day-supplier-name { font-size: 12px; }
+      .mat-day-supplier-info { font-size: 9px; }
 
       .mat-section { padding: 18px 14px; }
       .mat-filter-bar { gap: 6px; margin-bottom: 18px; overflow-x: auto; flex-wrap: nowrap; padding-bottom: 6px; }
@@ -963,6 +1026,7 @@
       <div id="matSummaryBadges" style="display:flex;gap:10px;flex-wrap:wrap"></div>
     </div>
     <div id="matMasterCal"><!-- Master calendar populated by JS --></div>
+    <div id="matDayDetails" style="display:none"><!-- Daily delivery details populated by JS --></div>
     <div class="mat-filter-bar" id="matFilters"><!-- Populated by JS --></div>
     <div id="matList"><!-- Populated by JS --></div>
   </div>
@@ -1404,6 +1468,76 @@ function switchPage(page){
 }
 
 /* ═══════════════════════════════════════════════════════════
+   DAILY DELIVERY DETAILS (click on calendar day)
+═══════════════════════════════════════════════════════════ */
+window.showDayDetails = function(dateStr){
+  const DAYS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+  function statusOf(dateStr){
+    const today = new Date(); today.setHours(0,0,0,0);
+    const d = new Date(dateStr + 'T00:00:00');
+    const diff = d - today;
+    if(diff < 0) return 'arrived';
+    if(diff <= 604800000) return 'upcoming'; // 7 days
+    return 'future';
+  }
+
+  function statusLabel(s){
+    return s === 'arrived' ? 'ARRIVED' : s === 'upcoming' ? 'UPCOMING' : 'FUTURE';
+  }
+
+  // Find all suppliers delivering on this date
+  const suppliers = [];
+  MATERIALS.forEach(mat => {
+    const delivery = mat.dates.find(d => d.date === dateStr);
+    if(delivery){
+      suppliers.push({
+        name: mat.name,
+        category: mat.category,
+        supplier: mat.supplier,
+        contact: mat.contact || '—',
+        tel: mat.tel,
+        status: statusOf(dateStr),
+      });
+    }
+  });
+
+  if(suppliers.length === 0){
+    document.getElementById('matDayDetails').style.display = 'none';
+    return;
+  }
+
+  // Format date display
+  const d = new Date(dateStr + 'T00:00:00');
+  const dateDisplay = `${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()} (${DAYS[d.getDay()]})`;
+
+  const supplierHtml = suppliers.map(s => `
+    <div class="mat-day-supplier">
+      <div class="mat-day-supplier-name">${s.name}</div>
+      <div class="mat-day-supplier-info">
+        <div>Supplier: <strong>${s.supplier}</strong> · ${s.category}</div>
+        <div>Contact: <strong>${s.contact}</strong> · Tel: <strong>${s.tel}</strong></div>
+      </div>
+      <div class="mat-day-supplier-status ${s.status}">${statusLabel(s.status)}</div>
+    </div>
+  `).join('');
+
+  document.getElementById('matDayDetails').innerHTML = `
+    <div class="mat-day-details">
+      <div class="mat-day-details-head">
+        <div class="mat-day-details-date">${dateDisplay}</div>
+        <button class="mat-day-details-close" onclick="document.getElementById('matDayDetails').style.display='none'">✕</button>
+      </div>
+      <div class="mat-day-details-list">
+        ${supplierHtml}
+      </div>
+    </div>
+  `;
+  document.getElementById('matDayDetails').style.display = 'block';
+};
+
+/* ═══════════════════════════════════════════════════════════
    MASTER CALENDAR FOR ALL MATERIALS
 ═══════════════════════════════════════════════════════════ */
 function buildMasterCalendar(mats){
@@ -1470,7 +1604,7 @@ function buildMasterCalendar(mats){
 
       if(count){
         cls += ' has-delivery';
-        cells += `<div class="${cls}"><span>${d}</span><span class="mat-mc-count">${count}</span></div>`;
+        cells += `<div class="${cls}" style="cursor:pointer" onclick="showDayDetails('${dateStr}')"><span>${d}</span><span class="mat-mc-count">${count}</span></div>`;
       } else if(isToday){
         cls += ' today-mark';
         cells += `<div class="${cls}">${d}</div>`;
