@@ -403,12 +403,12 @@
     .note-body { user-select: text; }
 
     /* Grouped categories inside "This Week's Work" */
-    .note-group { margin-bottom: 10px; }
+    .note-group { margin-bottom: 8px; }
     .note-group:last-child { margin-bottom: 0; }
     .note-group-head {
       display: flex; align-items: center; gap: 8px;
       font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
-      font-weight: 700; margin-bottom: 6px; padding-bottom: 4px;
+      font-weight: 700; margin-bottom: 5px; padding-bottom: 3px;
       border-bottom: 1px dashed rgba(255,255,255,.06);
     }
     .note-group-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
@@ -423,8 +423,8 @@
     .note-group.g-mep .note-group-dot { background: var(--orange); }
     .note-group.g-other .note-group-dot { background: var(--muted); }
     .note-line {
-      display: flex; gap: 8px; margin-bottom: 5px;
-      font-size: 12px; line-height: 1.55;
+      display: flex; gap: 8px; margin-bottom: 3px;
+      font-size: 12px; line-height: 1.45;
     }
     .note-line:last-child { margin-bottom: 0; }
     .note-line-bullet { color: var(--gold-d); flex-shrink: 0; }
@@ -1421,19 +1421,13 @@ function renderNotes(){
   }
   function renderGrouped(id, items){
     if(!items.length){
-      document.getElementById(id).innerHTML =
-        `<span style="color:var(--dim);font-style:italic">No updates this week</span>`;
+      document.getElementById(id).innerHTML = `<span style="color:var(--dim);font-style:italic">No updates this week</span>`;
       return;
     }
     const buckets = categorize(items);
     const html = CATS.filter(c => buckets[c.key].length).map(c => {
-      const lines = buckets[c.key].map(t =>
-        `<div class="note-line"><span class="note-line-bullet">›</span><span>${t}</span></div>`
-      ).join('');
-      return `<div class="note-group ${c.cls}">
-        <div class="note-group-head"><span class="note-group-dot"></span>${c.label}</div>
-        ${lines}
-      </div>`;
+      const lines = buckets[c.key].map(t => `<div class="note-line"><span class="note-line-bullet">›</span><span>${t}</span></div>`).join('');
+      return `<div class="note-group ${c.cls}"><div class="note-group-head"><span class="note-group-dot"></span>${c.label}</div>${lines}</div>`;
     }).join('');
     document.getElementById(id).innerHTML = html;
   }
