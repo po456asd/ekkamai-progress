@@ -588,6 +588,24 @@
     }
     .cal-day.empty { opacity: 0; }
 
+    /* ── MASTER DELIVERY CALENDAR ── */
+    .mat-master-cal {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 14px; padding: 24px;
+      margin-bottom: 24px; animation: fadeUp .4s both;
+    }
+    .mat-master-cal .sec-head { margin-bottom: 18px; }
+    .mat-master-cal .sec-title { font-size: 18px; }
+
+    /* Count badge for multiple deliveries per day */
+    .mat-mc-count {
+      display: inline-block;
+      background: rgba(201,168,76,.3); color: var(--gold);
+      font-size: 8px; font-weight: 700;
+      padding: 1px 5px; border-radius: 10px;
+      margin-left: 2px; letter-spacing: .5px;
+    }
+
     /* ── FOOTER ── */
     footer {
       border-top: 1px solid var(--border);
@@ -611,6 +629,9 @@
       header { padding: 14px 24px; }
       .edit-bar, .notes-section, .page-tabs, .mat-section { padding-left: 24px; padding-right: 24px; }
       .wrap { padding: 24px; }
+
+      .mat-master-cal { padding: 18px; }
+      .mat-master-cal .sec-title { font-size: 16px; }
     }
 
     /* Tablet / small landscape */
@@ -724,7 +745,13 @@
       .chart-card { padding: 16px 12px; border-radius: 12px; }
       .chart-card > div[style] { height: 220px !important; }
 
-      /* MATERIALS */
+      /* MATERIALS — Master calendar */
+      .mat-master-cal { padding: 14px; margin-bottom: 18px; border-radius: 12px; }
+      .mat-master-cal .sec-head { margin-bottom: 12px; }
+      .mat-master-cal .sec-title { font-size: 14px; }
+      .mat-master-cal .sec-sub { font-size: 8px; }
+      .mat-mc-count { font-size: 7px; padding: 1px 4px; }
+
       .mat-section { padding: 18px 14px; }
       .mat-filter-bar { gap: 6px; margin-bottom: 18px; overflow-x: auto; flex-wrap: nowrap; padding-bottom: 6px; }
       .mat-filter { padding: 5px 12px; font-size: 10px; white-space: nowrap; flex-shrink: 0; }
@@ -935,6 +962,7 @@
       </div>
       <div id="matSummaryBadges" style="display:flex;gap:10px;flex-wrap:wrap"></div>
     </div>
+    <div id="matMasterCal"><!-- Master calendar populated by JS --></div>
     <div class="mat-filter-bar" id="matFilters"><!-- Populated by JS --></div>
     <div id="matList"><!-- Populated by JS --></div>
   </div>
@@ -1376,6 +1404,90 @@ function switchPage(page){
 }
 
 /* ═══════════════════════════════════════════════════════════
+   MASTER CALENDAR FOR ALL MATERIALS
+═══════════════════════════════════════════════════════════ */
+function buildMasterCalendar(mats){
+  const today = new Date(); today.setHours(0,0,0,0);
+  const DAYS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+  // Collect all dates from filtered materials
+  const allDates = [].concat(...mats.map(m => m.dates.map(d => d.date)));
+  if(allDates.length === 0){
+    return `<div class="mat-master-cal">
+      <div class="sec-head">
+        <div class="sec-title">Master Delivery Calendar</div>
+        <div class="sec-sub">All suppliers · No deliveries scheduled for this filter</div>
+      </div>
+      <div style="color:var(--dim);font-style:italic;padding:12px">No delivery dates to display</div>
+    </div>`;
+  }
+
+  // Build map: date → count of suppliers delivering that day
+  const dateToCount = {};
+  allDates.forEach(ds => {
+    dateToCount[ds] = (dateToCount[ds] || 0) + 1;
+  });
+
+  // Group by month
+  const months = [];
+  Object.keys(dateToCount).forEach(ds => {
+    const d = new Date(ds + 'T00:00:00');
+    const key = d.getFullYear() + '-' + d.getMonth();
+    if(!months.find(m => m.key === key)){
+      months.push({ key, year: d.getFullYear(), month: d.getMonth() });
+    }
+  });
+  // Include current month if not present
+  const todayKey = today.getFullYear() + '-' + today.getMonth();
+  if(!months.find(m => m.key === todayKey)){
+    months.unshift({ key: todayKey, year: today.getFullYear(), month: today.getMonth() });
+  }
+  months.sort((a,b) => a.year !== b.year ? a.year - b.year : a.month - b.month);
+
+  const calHtml = `<div class="cal-strip">${months.map(({year, month}) => {
+    const daysInMonth = new Date(year, month+1, 0).getDate();
+    const firstDay = new Date(year, month, 1).getDay();
+
+    // Days with deliveries in this month
+    const deliveryDays = new Set(
+      Object.keys(dateToCount).filter(ds => {
+        const d = new Date(ds + 'T00:00:00');
+        return d.getFullYear() === year && d.getMonth() === month;
+      }).map(ds => new Date(ds + 'T00:00:00').getDate())
+    );
+
+    let cells = '<div class="cal-day-hdr">S</div><div class="cal-day-hdr">M</div><div class="cal-day-hdr">T</div><div class="cal-day-hdr">W</div><div class="cal-day-hdr">T</div><div class="cal-day-hdr">F</div><div class="cal-day-hdr">S</div>';
+    for(let i=0;i<firstDay;i++) cells += '<div class="cal-day empty">·</div>';
+
+    for(let d=1;d<=daysInMonth;d++){
+      const dateStr = year + '-' + String(month+1).padStart(2,'0') + '-' + String(d).padStart(2,'0');
+      let cls = 'cal-day';
+      const count = dateToCount[dateStr];
+      if(count){
+        cls += ' has-delivery';
+        cells += `<div class="${cls}"><span>${d}</span><span class="mat-mc-count">${count}</span></div>`;
+      } else {
+        cells += `<div class="${cls}">${d}</div>`;
+      }
+    }
+
+    return `<div class="cal-month">
+      <div class="cal-month-name">${MONTHS[month]} ${year}</div>
+      <div class="cal-grid">${cells}</div>
+    </div>`;
+  }).join('')}</div>`;
+
+  return `<div class="mat-master-cal">
+    <div class="sec-head">
+      <div class="sec-title">Master Delivery Calendar</div>
+      <div class="sec-sub">All suppliers · ${allDates.length} deliveries scheduled</div>
+    </div>
+    ${calHtml}
+  </div>`;
+}
+
+/* ═══════════════════════════════════════════════════════════
    MATERIALS RENDERING
 ═══════════════════════════════════════════════════════════ */
 function renderMaterials(){
@@ -1452,8 +1564,14 @@ function renderMaterials(){
   window.setMatFilter = function(cat){
     activeCat = cat;
     buildFilters();
-    buildMatList();
+    buildMasterCalendarAndList();
   };
+
+  function buildMasterCalendarAndList(){
+    const filtered = activeCat === 'All' ? MATERIALS : MATERIALS.filter(m=>m.category===activeCat);
+    document.getElementById('matMasterCal').innerHTML = buildMasterCalendar(filtered);
+    buildMatList();
+  }
 
   // Summary badges (total items, items with dates, arrived)
   const totalItems = MATERIALS.length;
@@ -1522,7 +1640,7 @@ function renderMaterials(){
         </div>
       </div>
       ${noDateMsg}
-      ${total > 0 ? `<div class="delivery-timeline">${rows}</div>${buildCalStrip(mat.dates)}` : ''}
+      ${total > 0 ? `<div class="delivery-timeline">${rows}</div>` : ''}
     </div>`;
       }).join('');
       return catHeader + cards;
@@ -1530,7 +1648,7 @@ function renderMaterials(){
   }
 
   buildFilters();
-  buildMatList();
+  buildMasterCalendarAndList();
 }
 
 /* ═══════════════════════════════════════════════════════════
