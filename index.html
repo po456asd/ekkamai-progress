@@ -2040,6 +2040,7 @@ function renderFloorDetail(fk){
   const ov = overallFloor(f);
   const mepVal = mep(f);
   const mepTestVal = mepTest(f);
+  const strVal = Math.round((f.flooring + f.walls + f.stairs) / 3);
 
   const spaceHTML = f.spaces && f.spaces.length ? `
     <div class="spaces-sect">
@@ -2065,10 +2066,24 @@ function renderFloorDetail(fk){
     <div class="pbar-item f-str">
       <div class="pbar-row">
         <div class="pbar-label"><span class="pbar-dot"></span> Structure</div>
-        <div class="pbar-pct">${f.str}%</div>
+        <div class="pbar-pct">${strVal}%</div>
       </div>
       <div class="pbar-track">
-        <div class="pbar-fill" style="width:0%" data-w="${f.str}%"></div>
+        <div class="pbar-fill" style="width:0%" data-w="${strVal}%"></div>
+      </div>
+      <div class="mep-sub">
+        <div class="mep-chip">
+          <div class="mc-label">Flooring (พื้น)</div>
+          <div class="mc-val">${f.flooring}%</div>
+        </div>
+        <div class="mep-chip">
+          <div class="mc-label">Walls (เสา/ผนัง)</div>
+          <div class="mc-val">${f.walls}%</div>
+        </div>
+        <div class="mep-chip">
+          <div class="mc-label">Fire Exit Stairs</div>
+          <div class="mc-val">${f.stairs}%</div>
+        </div>
       </div>
     </div>
 
@@ -2080,6 +2095,16 @@ function renderFloorDetail(fk){
       <div class="pbar-track">
         <div class="pbar-fill" style="width:0%" data-w="${f.arc}%"></div>
       </div>
+      <div class="mep-sub">
+        <div class="mep-chip">
+          <div class="mc-label">Walls / Finishes</div>
+          <div class="mc-val">${f.arc}%</div>
+        </div>
+        <div class="mep-chip">
+          <div class="mc-label">Skim Coating</div>
+          <div class="mc-val">${f.skim}%</div>
+        </div>
+      </div>
     </div>
 
     <div class="pbar-item f-int">
@@ -2089,6 +2114,12 @@ function renderFloorDetail(fk){
       </div>
       <div class="pbar-track">
         <div class="pbar-fill" style="width:0%" data-w="${f.int}%"></div>
+      </div>
+      <div class="mep-sub">
+        <div class="mep-chip">
+          <div class="mc-label">Furniture / FF&amp;E</div>
+          <div class="mc-val">${f.int}%</div>
+        </div>
       </div>
     </div>
 
@@ -2115,6 +2146,11 @@ function renderFloorDetail(fk){
           <div class="mc-label">Water / Plumbing</div>
           <div class="mc-val">${f.water_done}%</div>
           <div class="mc-tested">Tested: <span>${f.water_test}%</span></div>
+        </div>
+        <div class="mep-chip">
+          <div class="mc-label">Fire Protection</div>
+          <div class="mc-val">${f.fire_done}%</div>
+          <div class="mc-tested">Tested: <span>${f.fire_test}%</span></div>
         </div>
       </div>
     </div>
@@ -2167,11 +2203,12 @@ function renderMatrix(){
     const ov = overallFloor(f);
     const mepVal = mep(f);
     const mepTestVal = mepTest(f);
+    const strVal = Math.round((f.flooring + f.walls + f.stairs) / 3);
     const spaceSummary = f.spaces ? f.spaces.slice(0,3).join(', ') + (f.spaces.length > 3 ? ` +${f.spaces.length-3}` : '') : '—';
     return `<tr>
       <td class="floor-name" style="cursor:pointer" onclick="selectFloor('${fk}')">${f.label}</td>
       <td style="font-size:10px;color:var(--muted);text-align:left;max-width:180px">${spaceSummary}</td>
-      <td>${matBar(f.str,  'str')}</td>
+      <td>${matBar(strVal, 'str')}</td>
       <td>${matBar(f.arc,  'arc')}</td>
       <td>${matBar(f.int,  'int')}</td>
       <td>${matBar(mepVal, 'mep', mepTestVal)}</td>
