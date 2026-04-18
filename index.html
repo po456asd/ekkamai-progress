@@ -586,6 +586,9 @@
     .cal-day.today-mark {
       background: rgba(61,190,124,.15); color: var(--green);
     }
+    .cal-day.sunday {
+      background: rgba(192,57,43,.12); color: #e05a4a;
+    }
     .cal-day.empty { opacity: 0; }
 
     /* ── MASTER DELIVERY CALENDAR ── */
@@ -1050,34 +1053,34 @@ const DATA = {
     floors: {
       R:  { label:"Roof Floor", isRoof:true,
             spaces:["Water Tank Area","Swimming Pool","Swimming Pool Balcony","Kids Area"],
-            str:0,  arc:0,  int:0,  elec_done:0, elec_test:0, hvac_done:0, hvac_test:0, water_done:0, water_test:0  },
+            str:0,  arc:0,  int:0,  stairs:0, skim:0, elec_done:0, elec_test:0, hvac_done:0, hvac_test:0, water_done:0, water_test:0, fpump_done:0, fpump_test:0  },
       8:  { label:"Floor 8",
             spaces:["2 Guest Rooms","Guest Bathroom","4 Public Toilets","Fitness Room","Toilet 10","Toilet 11","Toilet 12","Corridor","Pump Room"],
-            str:100,arc:0,  int:0,  elec_done:0, elec_test:0, hvac_done:0, hvac_test:0, water_done:5, water_test:0  },
+            str:100,arc:0,  int:0,  stairs:0, skim:0, elec_done:0, elec_test:0, hvac_done:0, hvac_test:0, water_done:5, water_test:0, fpump_done:0, fpump_test:0  },
       7:  { label:"Floor 7",
             spaces:["14 Guest Rooms","Guest Bathroom","Corridor"],
-            str:100,arc:0,  int:0,  elec_done:0, elec_test:0, hvac_done:0, hvac_test:0, water_done:0, water_test:0  },
+            str:100,arc:0,  int:0,  stairs:0, skim:0, elec_done:0, elec_test:0, hvac_done:0, hvac_test:0, water_done:0, water_test:0, fpump_done:0, fpump_test:0  },
       6:  { label:"Floor 6",
             spaces:["14 Guest Rooms","Guest Bathroom","Corridor"],
-            str:100,arc:0,  int:0,  elec_done:0, elec_test:0, hvac_done:0, hvac_test:0, water_done:0, water_test:0  },
+            str:100,arc:0,  int:0,  stairs:0, skim:0, elec_done:0, elec_test:0, hvac_done:0, hvac_test:0, water_done:0, water_test:0, fpump_done:0, fpump_test:0  },
       5:  { label:"Floor 5",
             spaces:["14 Guest Rooms","Guest Bathroom","Corridor"],
-            str:100,arc:0,  int:0,  elec_done:0, elec_test:0, hvac_done:0, hvac_test:0, water_done:0, water_test:0  },
+            str:100,arc:0,  int:0,  stairs:0, skim:0, elec_done:0, elec_test:0, hvac_done:0, hvac_test:0, water_done:0, water_test:0, fpump_done:0, fpump_test:0  },
       4:  { label:"Floor 4",
             spaces:["14 Guest Rooms","Guest Bathroom","Corridor"],
-            str:100,arc:48, int:0,  elec_done:0, elec_test:0, hvac_done:35, hvac_test:0, water_done:0, water_test:0  },
+            str:100,arc:48, int:0,  stairs:0, skim:0, elec_done:0, elec_test:0, hvac_done:35, hvac_test:0, water_done:0, water_test:0, fpump_done:0, fpump_test:0  },
       3:  { label:"Floor 3",
             spaces:["14 Guest Rooms","Guest Bathroom","Corridor"],
-            str:100,arc:55, int:0,  elec_done:0, elec_test:0, hvac_done:35, hvac_test:0, water_done:0, water_test:0  },
+            str:100,arc:55, int:0,  stairs:0, skim:0, elec_done:0, elec_test:0, hvac_done:35, hvac_test:0, water_done:0, water_test:0, fpump_done:0, fpump_test:0  },
       2:  { label:"Floor 2",
             spaces:["14 Guest Rooms","Guest Bathroom","Corridor"],
-            str:100,arc:42, int:10, elec_done:75, elec_test:0, hvac_done:30, hvac_test:0, water_done:60, water_test:0  },
+            str:100,arc:42, int:10, stairs:0, skim:0, elec_done:75, elec_test:0, hvac_done:30, hvac_test:0, water_done:60, water_test:0, fpump_done:0, fpump_test:0  },
       1:  { label:"Floor 1",
             spaces:["Shop 1","Lobby","Office 1","Office 2","Staff Locker","Staff Toilet","Landscape","Parking","Toilet 1","Toilet 2","Toilet 3","Toilet 4","Toilet 5"],
-            str:100,arc:0,  int:0,  elec_done:0, elec_test:0, hvac_done:0, hvac_test:0, water_done:0, water_test:0  },
+            str:100,arc:0,  int:0,  stairs:0, skim:0, elec_done:0, elec_test:0, hvac_done:0, hvac_test:0, water_done:0, water_test:0, fpump_done:0, fpump_test:0  },
       B:  { label:"Basement", isBasement:true,
             spaces:["Parking Lot","Shop 2","Shop 3","All Day Dining","Kitchen"],
-            str:100,arc:0,  int:0,  elec_done:0, elec_test:0, hvac_done:0, hvac_test:0, water_done:0, water_test:0  },
+            str:100,arc:0,  int:0,  stairs:0, skim:0, elec_done:0, elec_test:0, hvac_done:0, hvac_test:0, water_done:0, water_test:0, fpump_done:0, fpump_test:0  },
     }
   },
   B: {
@@ -1085,34 +1088,34 @@ const DATA = {
     floors: {
       R:  { label:"Roof Floor", isRoof:true,
             spaces:["Blank Roof Area","Water Tank"],
-            str:0,  arc:0,  int:0,  elec_done:0, elec_test:0, hvac_done:0, hvac_test:0, water_done:0, water_test:0  },
+            str:0,  arc:0,  int:0,  stairs:0, skim:0, elec_done:0, elec_test:0, hvac_done:0, hvac_test:0, water_done:0, water_test:0, fpump_done:0, fpump_test:0  },
       8:  { label:"Floor 8",
             spaces:["14 Guest Rooms","Guest Bathroom","Corridor"],
-            str:100,arc:0,  int:0,  elec_done:0, elec_test:0, hvac_done:0, hvac_test:0, water_done:0, water_test:0  },
+            str:100,arc:0,  int:0,  stairs:0, skim:0, elec_done:0, elec_test:0, hvac_done:0, hvac_test:0, water_done:0, water_test:0, fpump_done:0, fpump_test:0  },
       7:  { label:"Floor 7",
             spaces:["14 Guest Rooms","Guest Bathroom","Corridor"],
-            str:100,arc:0,  int:0,  elec_done:0, elec_test:0, hvac_done:0, hvac_test:0, water_done:0, water_test:0  },
+            str:100,arc:0,  int:0,  stairs:0, skim:0, elec_done:0, elec_test:0, hvac_done:0, hvac_test:0, water_done:0, water_test:0, fpump_done:0, fpump_test:0  },
       6:  { label:"Floor 6",
             spaces:["14 Guest Rooms","Guest Bathroom","Corridor"],
-            str:100,arc:5,  int:0,  elec_done:0, elec_test:0, hvac_done:0, hvac_test:0, water_done:0, water_test:0  },
+            str:100,arc:5,  int:0,  stairs:0, skim:0, elec_done:0, elec_test:0, hvac_done:0, hvac_test:0, water_done:0, water_test:0, fpump_done:0, fpump_test:0  },
       5:  { label:"Floor 5",
             spaces:["14 Guest Rooms","Guest Bathroom","Corridor"],
-            str:100,arc:30, int:0,  elec_done:0, elec_test:0, hvac_done:0, hvac_test:0, water_done:20, water_test:0  },
+            str:100,arc:30, int:0,  stairs:0, skim:0, elec_done:0, elec_test:0, hvac_done:0, hvac_test:0, water_done:20, water_test:0, fpump_done:0, fpump_test:0  },
       4:  { label:"Floor 4",
             spaces:["14 Guest Rooms","Guest Bathroom","Corridor"],
-            str:100,arc:50, int:0,  elec_done:0, elec_test:0, hvac_done:0, hvac_test:0, water_done:0, water_test:0  },
+            str:100,arc:50, int:0,  stairs:0, skim:0, elec_done:0, elec_test:0, hvac_done:0, hvac_test:0, water_done:0, water_test:0, fpump_done:0, fpump_test:0  },
       3:  { label:"Floor 3",
             spaces:["14 Guest Rooms","Guest Bathroom","Corridor"],
-            str:100,arc:45, int:0,  elec_done:20, elec_test:0, hvac_done:40, hvac_test:0, water_done:85, water_test:85  },
+            str:100,arc:45, int:0,  stairs:0, skim:0, elec_done:20, elec_test:0, hvac_done:40, hvac_test:0, water_done:85, water_test:85, fpump_done:0, fpump_test:0  },
       2:  { label:"Floor 2",
             spaces:["16 Guest Rooms","Guest Bathroom","Corridor"],
-            str:100,arc:38, int:20, elec_done:82, elec_test:0, hvac_done:0, hvac_test:0, water_done:75, water_test:0  },
+            str:100,arc:38, int:20, stairs:0, skim:0, elec_done:82, elec_test:0, hvac_done:0, hvac_test:0, water_done:75, water_test:0, fpump_done:0, fpump_test:0  },
       1:  { label:"Floor 1",
             spaces:["Shop 1","Lobby","Office 1","Office 2","Staff Locker","Staff Toilet","Landscape","Parking","Toilet 1","Toilet 2","Toilet 3","Toilet 4","Toilet 5"],
-            str:100,arc:0,  int:0,  elec_done:0, elec_test:0, hvac_done:0, hvac_test:0, water_done:0, water_test:0  },
+            str:100,arc:0,  int:0,  stairs:0, skim:0, elec_done:0, elec_test:0, hvac_done:0, hvac_test:0, water_done:0, water_test:0, fpump_done:0, fpump_test:0  },
       B:  { label:"Basement", isBasement:true,
             spaces:["Parking Lot","Shop 2","Shop 3","All Day Dining","Kitchen"],
-            str:100,arc:0,  int:0,  elec_done:0, elec_test:0, hvac_done:0, hvac_test:0, water_done:0, water_test:0  },
+            str:100,arc:0,  int:0,  stairs:0, skim:0, elec_done:0, elec_test:0, hvac_done:0, hvac_test:0, water_done:0, water_test:0, fpump_done:0, fpump_test:0  },
     }
   }
 };
@@ -1127,8 +1130,9 @@ const MATERIALS = [
   {
     name: "Door Fittings",
     category: "Architecture",
-    supplier: "Placeholder",
-    tel: "Placeholder",
+    supplier: "Majextic Home Thanawat",
+    contact: "K. Yotchai",
+    tel: "02-721-4194-5",
     dates: [
       { date: "2026-04-20", qty: "", note: "" },
       { date: "2026-05-10", qty: "", note: "" },
@@ -1152,7 +1156,9 @@ const MATERIALS = [
     supplier: "KT",
     contact: "K. Shetsak",
     tel: "098-830-4595",
-    dates: []
+    dates: [
+      { date: "2026-05-01", qty: "", note: "may be changed" },
+    ]
   },
   {
     name: "DB Panel",
@@ -1160,7 +1166,9 @@ const MATERIALS = [
     supplier: "KT",
     contact: "K. Shetsak",
     tel: "098-830-4595",
-    dates: []
+    dates: [
+      { date: "2026-05-01", qty: "", note: "may be changed" },
+    ]
   },
   {
     name: "Consumer Unit",
@@ -1168,23 +1176,32 @@ const MATERIALS = [
     supplier: "KT",
     contact: "K. Shetsak",
     tel: "098-830-4595",
-    dates: []
+    dates: [
+      { date: "2026-05-01", qty: "", note: "may be changed" },
+    ]
   },
   {
     name: "Switch & Outlet",
     category: "MEP — Electrical",
     supplier: "Marvel",
     contact: "K. Neuy",
-    tel: "093-590-9556",
-    dates: []
+    tel: "0935-909-556",
+    dates: [
+      { date: "2026-04-28", qty: "", note: "" },
+      { date: "2026-05-15", qty: "", note: "" },
+      { date: "2026-05-23", qty: "", note: "" },
+    ]
   },
   {
     name: "RCU & Keycard",
     category: "MEP — Electrical",
     supplier: "Master Control",
     contact: "K. Lin",
-    tel: "086-324-0614",
-    dates: []
+    tel: "0863-240-614",
+    dates: [
+      { date: "2026-04-29", qty: "", note: "" },
+      { date: "2026-05-15", qty: "", note: "" },
+    ]
   },
   {
     name: "Light Fixture",
@@ -1203,24 +1220,36 @@ const MATERIALS = [
     category: "MEP — Electrical",
     supplier: "Sahasawat",
     contact: "K. Nee",
-    tel: "088-786-0297",
-    dates: []
+    tel: "0887-860-297",
+    dates: [
+      { date: "2026-04-07", qty: "", note: "" },
+      { date: "2026-04-28", qty: "", note: "" },
+      { date: "2026-05-23", qty: "", note: "" },
+    ]
   },
   {
     name: "Emergency & Exit Light",
     category: "MEP — Electrical",
     supplier: "Sahasawat",
     contact: "K. Nee",
-    tel: "088-786-0297",
-    dates: []
+    tel: "0887-860-297",
+    dates: [
+      { date: "2026-04-07", qty: "", note: "" },
+      { date: "2026-04-28", qty: "", note: "" },
+      { date: "2026-05-23", qty: "", note: "" },
+    ]
   },
   {
     name: "Computer & Server Network",
     category: "MEP — Electrical",
     supplier: "Phatshat",
     contact: "K. Phat",
-    tel: "084-652-9479",
-    dates: []
+    tel: "0846-529-479",
+    dates: [
+      { date: "2026-04-07", qty: "", note: "" },
+      { date: "2026-04-28", qty: "", note: "" },
+      { date: "2026-05-23", qty: "", note: "" },
+    ]
   },
   {
     name: "WiFi + Digital TV",
@@ -1243,24 +1272,30 @@ const MATERIALS = [
     category: "MEP — Plumbing",
     supplier: "Heismann",
     contact: "K. Thatyawutt",
-    tel: "089-895-4236",
-    dates: []
+    tel: "0898-954-236",
+    dates: [
+      { date: "2026-05-20", qty: "", note: "" },
+    ]
   },
   {
     name: "Hot Water Tank",
     category: "MEP — Plumbing",
     supplier: "Heismann",
     contact: "K. Thatyawutt",
-    tel: "089-895-4236",
-    dates: []
+    tel: "0898-954-236",
+    dates: [
+      { date: "2026-05-20", qty: "", note: "" },
+    ]
   },
   {
     name: "Hot Water Return Pump",
     category: "MEP — Plumbing",
     supplier: "Heismann",
     contact: "K. Thatyawutt",
-    tel: "089-895-4236",
-    dates: []
+    tel: "0898-954-236",
+    dates: [
+      { date: "2026-05-20", qty: "", note: "" },
+    ]
   },
   {
     name: "Swimming Pool",
@@ -1293,16 +1328,18 @@ const CAT = [
   { key:'mep',  label:'MEP Works',          color:'var(--orange)', cls:'k-mep', track:'#30180a', bg:'rgba(232,135,58,.15)' },
 ];
 
-function mep(f){ return Math.round((f.elec_done + f.hvac_done + f.water_done) / 3); }
-function mepTest(f){ return Math.round((f.elec_test + f.hvac_test + f.water_test) / 3); }
+function mep(f){ return Math.round((f.elec_done + f.hvac_done + f.water_done + f.fpump_done) / 4); }
+function mepTest(f){ return Math.round((f.elec_test + f.hvac_test + f.water_test + f.fpump_test) / 4); }
 
 function overallFloor(f){
-  return Math.round((f.str + f.arc + f.int + mep(f)) / 4);
+  const structure = Math.round((f.str + f.stairs) / 2);
+  return Math.round((structure + f.arc + f.int + mep(f)) / 4);
 }
 
 function buildingAvg(bld, key){
   const floors = getFloorKeys(bld)
     .map(k => DATA[bld].floors[k]);
+  if(key === 'str')      return Math.round(floors.reduce((s,f)=>s+Math.round((f.str+f.stairs)/2),0)/floors.length);
   if(key === 'mep')      return Math.round(floors.reduce((s,f)=>s+mep(f),0)/floors.length);
   if(key === 'mep_test') return Math.round(floors.reduce((s,f)=>s+mepTest(f),0)/floors.length);
   return Math.round(floors.reduce((s,f)=>s+f[key],0)/floors.length);
@@ -1595,6 +1632,10 @@ function buildMasterCalendar(mats){
 
       // Check if this is today
       const isToday = today.getFullYear() === year && today.getMonth() === month && today.getDate() === d;
+
+      // Check if this is Sunday (getDay() === 0)
+      const isSunday = new Date(year, month, d).getDay() === 0;
+      if(isSunday) cls += ' sunday';
 
       if(count){
         cls += ' has-delivery';
