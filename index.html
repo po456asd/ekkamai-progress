@@ -76,8 +76,9 @@
       letter-spacing: 2px; padding: 5px 18px; border-radius: 30px;
     }
     .h-right { text-align: right; }
-    .h-right .rdate { font-size: 13px; color: var(--muted); }
-    .h-right .rconsult { font-size: 10px; color: var(--dim); margin-top: 2px; letter-spacing: 1px; }
+    .h-right .rdate { font-size: 13px; color: #A09070; }
+    .h-right .rconsult { font-size: 10px; color: #9A8A60; margin-top: 2px; letter-spacing: 1px; }
+    .h-right .rbuild { font-size: 9px; color: #8A7A50; margin-top: 3px; letter-spacing: 0.5px; }
 
     /* Editable week/date controls */
     .edit-bar {
@@ -906,6 +907,7 @@
   <div class="h-right">
     <div class="rconsult" style="margin-bottom:3px">LAST UPDATED</div>
     <div class="rdate" id="headerDate">—</div>
+    <div class="rbuild" id="headerBuild">—</div>
     <div class="rconsult">Confidential · Internal Use</div>
   </div>
 </header>
@@ -1853,6 +1855,21 @@ function updateHeader(){
     document.getElementById('headerDate').textContent = dt.toLocaleDateString('en-GB',{
       day:'numeric', month:'long', year:'numeric'
     });
+
+    // Build version + revision
+    const buildDate = dt.toISOString().slice(0,10).replace(/-/g,'');
+    const now = new Date();
+    const timeStr = now.toLocaleTimeString('en-US',{hour12:true,hour:'2-digit',minute:'2-digit',second:'2-digit'});
+
+    // Track revision: increment each update, reset daily
+    const todayKey = now.toISOString().slice(0,10);
+    const stored = JSON.parse(localStorage.getItem('revisionState') || '{"date":"","rev":0}');
+    let rev = stored.rev || 0;
+    if(stored.date !== todayKey){ rev = 0; } // reset if new day
+    rev++;
+    localStorage.setItem('revisionState', JSON.stringify({date:todayKey, rev}));
+
+    document.getElementById('headerBuild').textContent = `UPDATED: ${timeStr} | BUILD: V${buildDate} | R ${rev}`;
   }
 }
 
