@@ -2272,7 +2272,10 @@ function barConfig(){
       datasets: [
         {
           label: 'Structure',
-          data: keys.map(k=>floors[k].str),
+          data: keys.map(k=>{
+            const f = floors[k];
+            return Math.round((f.flooring + f.walls + f.stairs) / 3);
+          }),
           backgroundColor: 'rgba(74,144,226,.55)',
           borderColor: 'rgba(74,144,226,.9)',
           borderWidth: 1, borderRadius: 4,
