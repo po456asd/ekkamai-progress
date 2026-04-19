@@ -1071,10 +1071,10 @@ const DATA = {
             flooring:100, walls:100, stairs:0, arc:48, int:0, skim:0, elec_done:0, elec_test:0, hvac_done:35, hvac_test:0, water_done:0, water_test:0, fire_done:0, fire_test:0  },
       3:  { label:"Floor 3",
             spaces:["14 Guest Rooms","Guest Bathroom","Corridor"],
-            flooring:100, walls:100, stairs:0, arc:55, int:0, skim:0, elec_done:0, elec_test:0, hvac_done:35, hvac_test:0, water_done:0, water_test:0, fire_done:0, fire_test:0  },
+            flooring:100, walls:100, stairs:0, arc:55, int:0, skim:0, elec_done:50, elec_test:0, hvac_done:35, hvac_test:0, water_done:0, water_test:0, fire_done:0, fire_test:0  },
       2:  { label:"Floor 2",
             spaces:["14 Guest Rooms","Guest Bathroom","Corridor"],
-            flooring:100, walls:100, stairs:0, arc:42, int:10, skim:0, elec_done:75, elec_test:0, hvac_done:30, hvac_test:0, water_done:60, water_test:0, fire_done:0, fire_test:0  },
+            flooring:100, walls:100, stairs:0, arc:42, int:10, skim:0, elec_done:95, elec_test:95, hvac_done:70, hvac_test:0, water_done:100, water_test:0, fire_done:0, fire_test:0  },
       1:  { label:"Floor 1",
             spaces:["Shop 1","Lobby","Office 1","Office 2","Staff Locker","Staff Toilet","Landscape","Parking","Toilet 1","Toilet 2","Toilet 3","Toilet 4","Toilet 5"],
             flooring:100, walls:100, stairs:0, arc:0, int:0, skim:0, elec_done:0, elec_test:0, hvac_done:0, hvac_test:0, water_done:0, water_test:0, fire_done:0, fire_test:0  },
@@ -1109,7 +1109,7 @@ const DATA = {
             flooring:100, walls:100, stairs:0, arc:45, int:0, skim:0, elec_done:20, elec_test:0, hvac_done:40, hvac_test:0, water_done:85, water_test:85, fire_done:0, fire_test:0  },
       2:  { label:"Floor 2",
             spaces:["16 Guest Rooms","Guest Bathroom","Corridor"],
-            flooring:100, walls:100, stairs:0, arc:38, int:20, skim:0, elec_done:82, elec_test:0, hvac_done:0, hvac_test:0, water_done:75, water_test:0, fire_done:0, fire_test:0  },
+            flooring:100, walls:100, stairs:0, arc:38, int:20, skim:0, elec_done:100, elec_test:0, hvac_done:85, hvac_test:0, water_done:100, water_test:100, fire_done:0, fire_test:0  },
       1:  { label:"Floor 1",
             spaces:["Shop 1","Lobby","Office 1","Office 2","Staff Locker","Staff Toilet","Landscape","Parking","Toilet 1","Toilet 2","Toilet 3","Toilet 4","Toilet 5"],
             flooring:100, walls:100, stairs:0, arc:0, int:0, skim:0, elec_done:0, elec_test:0, hvac_done:0, hvac_test:0, water_done:0, water_test:0, fire_done:0, fire_test:0  },
@@ -1373,7 +1373,7 @@ let radarChartInst = null;
    — cutoff: every Monday
 ═══════════════════════════════════════════════════════════ */
 const NOTES = {
-  cutoff: "2026-04-14",   // Monday of current week (YYYY-MM-DD)
+  cutoff: "2026-04-19",   // Monday of current week (YYYY-MM-DD)
   thisWeek: [
     "Structure: All floor slabs complete on both buildings — only roof slab remaining (both buildings)",
     "Structure Bldg A FL4: Corridor and rooms leveled and cleaned; FL3 leveling prep started in corridor (bathroom floors not yet poured)",
@@ -1383,10 +1383,11 @@ const NOTES = {
     "Architecture Bldg A: Bathroom tile requests submitted; floor levels set in some bathrooms, plastering required before tiling",
     "Architecture Bldg B: FL3 &amp; FL4 Q-con walls complete; FL5 Q-con ~70% done; leveling buttons placed on FL4 &amp; FL6",
     "Interior Bldg B FL2: Skim coating done in 9/16 rooms; corridor and remaining rooms pending; no ceilings started on any floor",
-    "MEP Bldg A FL2: Electrical trunking installed, wiring pulled in some areas (75%); AC units partially installed pending verification; Sprinklers installed under pressure testing (60%)",
+    "MEP Bldg A FL2: Electrical 95% done / 95% tested; HVAC 70% done; Water 100% done",
+    "MEP Bldg A FL3: Electrical 50% done",
     "MEP Bldg A FL3 &amp; FL4: AC piping with insulation installed, units pending (35%); no electrical riser pipes yet",
     "MEP Bldg A FL8: Surge tank sleeves laid (5%)",
-    "MEP Bldg B FL2: Electrical 82% done — 3 rooms still pending",
+    "MEP Bldg B FL2: Electrical 100% done; HVAC 85% done; Water 100% done and tested",
     "MEP Bldg B FL3: Electrical boxes installed (no wiring yet); AC piping done, units pending; Sprinklers pressure-tested (some heads need repositioning)",
     "MEP Bldg B FL5: Fire suppression piping partially installed; water pipes on site, not yet installed",
     "Swimming pool (Roof): Surge tank installed",
