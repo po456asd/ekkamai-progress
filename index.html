@@ -1088,22 +1088,22 @@ const DATA = {
     floors: {
       R:  { label:"Roof Floor", isRoof:true,
             spaces:["Blank Roof Area","Water Tank"],
-            flooring:100, walls:0, stairs:0, arc:0, int:10, skim:0, elec_done:0, elec_test:0, hvac_done:0, hvac_test:0, water_done:0, water_test:0, fire_done:0, fire_test:0  },
+            flooring:100, walls:0, stairs:0, arc:0, int:0, skim:0, elec_done:0, elec_test:0, hvac_done:0, hvac_test:0, water_done:0, water_test:0, fire_done:0, fire_test:0  },
       8:  { label:"Floor 8",
             spaces:["14 Guest Rooms","Guest Bathroom","Corridor"],
-            flooring:100, walls:100, stairs:0, arc:0, int:10, skim:0, elec_done:0, elec_test:0, hvac_done:0, hvac_test:0, water_done:0, water_test:0, fire_done:0, fire_test:0  },
+            flooring:100, walls:100, stairs:0, arc:0, int:0, skim:0, elec_done:0, elec_test:0, hvac_done:0, hvac_test:0, water_done:0, water_test:0, fire_done:0, fire_test:0  },
       7:  { label:"Floor 7",
             spaces:["14 Guest Rooms","Guest Bathroom","Corridor"],
-            flooring:100, walls:100, stairs:0, arc:0, int:10, skim:0, elec_done:0, elec_test:0, hvac_done:0, hvac_test:0, water_done:0, water_test:0, fire_done:0, fire_test:0  },
+            flooring:100, walls:100, stairs:0, arc:0, int:0, skim:0, elec_done:0, elec_test:0, hvac_done:0, hvac_test:0, water_done:0, water_test:0, fire_done:0, fire_test:0  },
       6:  { label:"Floor 6",
             spaces:["14 Guest Rooms","Guest Bathroom","Corridor"],
-            flooring:100, walls:100, stairs:0, arc:5, int:10, skim:0, elec_done:0, elec_test:0, hvac_done:0, hvac_test:0, water_done:0, water_test:0, fire_done:0, fire_test:0  },
+            flooring:100, walls:100, stairs:0, arc:5, int:0, skim:0, elec_done:0, elec_test:0, hvac_done:0, hvac_test:0, water_done:0, water_test:0, fire_done:0, fire_test:0  },
       5:  { label:"Floor 5",
             spaces:["14 Guest Rooms","Guest Bathroom","Corridor"],
-            flooring:100, walls:100, stairs:0, arc:30, int:10, skim:0, elec_done:0, elec_test:0, hvac_done:0, hvac_test:0, water_done:20, water_test:0, fire_done:0, fire_test:0  },
+            flooring:100, walls:100, stairs:0, arc:30, int:0, skim:0, elec_done:0, elec_test:0, hvac_done:0, hvac_test:0, water_done:20, water_test:0, fire_done:0, fire_test:0  },
       4:  { label:"Floor 4",
             spaces:["14 Guest Rooms","Guest Bathroom","Corridor"],
-            flooring:100, walls:100, stairs:0, arc:50, int:10, skim:0, elec_done:0, elec_test:0, hvac_done:0, hvac_test:0, water_done:0, water_test:0, fire_done:0, fire_test:0  },
+            flooring:100, walls:100, stairs:0, arc:50, int:0, skim:0, elec_done:0, elec_test:0, hvac_done:0, hvac_test:0, water_done:0, water_test:0, fire_done:0, fire_test:0  },
       3:  { label:"Floor 3",
             spaces:["14 Guest Rooms","Guest Bathroom","Corridor"],
             flooring:100, walls:100, stairs:0, arc:100, int:10, skim:0, elec_done:20, elec_test:0, hvac_done:40, hvac_test:0, water_done:85, water_test:85, fire_done:0, fire_test:0  },
@@ -1112,10 +1112,10 @@ const DATA = {
             flooring:100, walls:100, stairs:0, arc:100, int:10, skim:80, elec_done:100, elec_test:0, hvac_done:85, hvac_test:0, water_done:100, water_test:100, fire_done:0, fire_test:0  },
       1:  { label:"Floor 1",
             spaces:["Shop 1","Lobby","Office 1","Office 2","Staff Locker","Staff Toilet","Landscape","Parking","Toilet 1","Toilet 2","Toilet 3","Toilet 4","Toilet 5"],
-            flooring:100, walls:100, stairs:0, arc:0, int:10, skim:0, elec_done:0, elec_test:0, hvac_done:0, hvac_test:0, water_done:0, water_test:0, fire_done:0, fire_test:0  },
+            flooring:100, walls:100, stairs:0, arc:0, int:0, skim:0, elec_done:0, elec_test:0, hvac_done:0, hvac_test:0, water_done:0, water_test:0, fire_done:0, fire_test:0  },
       B:  { label:"Basement", isBasement:true,
             spaces:["Parking Lot","Shop 2","Shop 3","All Day Dining","Kitchen"],
-            flooring:100, walls:100, stairs:0, arc:0, int:10, skim:0, elec_done:0, elec_test:0, hvac_done:0, hvac_test:0, water_done:0, water_test:0, fire_done:0, fire_test:0  },
+            flooring:100, walls:100, stairs:0, arc:0, int:0, skim:0, elec_done:0, elec_test:0, hvac_done:0, hvac_test:0, water_done:0, water_test:0, fire_done:0, fire_test:0  },
     }
   }
 };
@@ -1329,16 +1329,18 @@ const CAT = [
 
 function mep(f){ return Math.round((f.elec_done + f.hvac_done + f.water_done + f.fire_done) / 4); }
 function mepTest(f){ return Math.round((f.elec_test + f.hvac_test + f.water_test + f.fire_test) / 4); }
+function arch(f){ return Math.round((f.arc + f.skim) / 2); }
 
 function overallFloor(f){
   const structure = Math.round((f.flooring + f.walls + f.stairs) / 3);
-  return Math.round((structure + f.arc + f.int + mep(f)) / 4);
+  return Math.round((structure + arch(f) + f.int + mep(f)) / 4);
 }
 
 function buildingAvg(bld, key){
   const floors = getFloorKeys(bld)
     .map(k => DATA[bld].floors[k]);
   if(key === 'str')      return Math.round(floors.reduce((s,f)=>s+Math.round((f.flooring+f.walls+f.stairs)/3),0)/floors.length);
+  if(key === 'arc')      return Math.round(floors.reduce((s,f)=>s+arch(f),0)/floors.length);
   if(key === 'mep')      return Math.round(floors.reduce((s,f)=>s+mep(f),0)/floors.length);
   if(key === 'mep_test') return Math.round(floors.reduce((s,f)=>s+mepTest(f),0)/floors.length);
   return Math.round(floors.reduce((s,f)=>s+f[key],0)/floors.length);
@@ -2041,6 +2043,7 @@ function renderFloorDetail(fk){
   const mepVal = mep(f);
   const mepTestVal = mepTest(f);
   const strVal = Math.round((f.flooring + f.walls + f.stairs) / 3);
+  const archVal = arch(f);
 
   const spaceHTML = f.spaces && f.spaces.length ? `
     <div class="spaces-sect">
@@ -2090,10 +2093,10 @@ function renderFloorDetail(fk){
     <div class="pbar-item f-arc">
       <div class="pbar-row">
         <div class="pbar-label"><span class="pbar-dot"></span> Architecture</div>
-        <div class="pbar-pct">${f.arc}%</div>
+        <div class="pbar-pct">${archVal}%</div>
       </div>
       <div class="pbar-track">
-        <div class="pbar-fill" style="width:0%" data-w="${f.arc}%"></div>
+        <div class="pbar-fill" style="width:0%" data-w="${archVal}%"></div>
       </div>
       <div class="mep-sub">
         <div class="mep-chip">
@@ -2204,12 +2207,13 @@ function renderMatrix(){
     const mepVal = mep(f);
     const mepTestVal = mepTest(f);
     const strVal = Math.round((f.flooring + f.walls + f.stairs) / 3);
+    const archVal = arch(f);
     const spaceSummary = f.spaces ? f.spaces.slice(0,3).join(', ') + (f.spaces.length > 3 ? ` +${f.spaces.length-3}` : '') : '—';
     return `<tr>
       <td class="floor-name" style="cursor:pointer" onclick="selectFloor('${fk}')">${f.label}</td>
       <td style="font-size:10px;color:var(--muted);text-align:left;max-width:180px">${spaceSummary}</td>
       <td>${matBar(strVal, 'str')}</td>
-      <td>${matBar(f.arc,  'arc')}</td>
+      <td>${matBar(archVal,  'arc')}</td>
       <td>${matBar(f.int,  'int')}</td>
       <td>${matBar(mepVal, 'mep', mepTestVal)}</td>
       <td>${matBar(ov,     'overall')}</td>
