@@ -1045,6 +1045,14 @@
 <!-- ══════════ SCRIPTS ══════════ -->
 <script>
 /* ═══════════════════════════════════════════════════════════
+   BUILD METADATA — Updated on each push
+═══════════════════════════════════════════════════════════ */
+const BUILD_META = {
+  timestamp: "2026-04-20T16:25:00Z",  // UTC push time
+  revision: 1                          // Increment on each Claude push
+};
+
+/* ═══════════════════════════════════════════════════════════
    PROJECT DATA — Edit these values each week
    All values are percentages (0–100)
    Floors: B=Basement, 1–8=Floors, R=Roof (Bldg A only)
@@ -1856,20 +1864,12 @@ function updateHeader(){
       day:'numeric', month:'long', year:'numeric'
     });
 
-    // Build version + revision
+    // Build version from BUILD_META (updated on each Claude push)
     const buildDate = dt.toISOString().slice(0,10).replace(/-/g,'');
-    const now = new Date();
-    const timeStr = now.toLocaleTimeString('en-US',{hour12:true,hour:'2-digit',minute:'2-digit',second:'2-digit'});
+    const pushTime = new Date(BUILD_META.timestamp);
+    const timeStr = pushTime.toLocaleTimeString('en-US',{hour12:true,hour:'2-digit',minute:'2-digit',second:'2-digit'});
 
-    // Track revision: increment each update, reset daily
-    const todayKey = now.toISOString().slice(0,10);
-    const stored = JSON.parse(localStorage.getItem('revisionState') || '{"date":"","rev":0}');
-    let rev = stored.rev || 0;
-    if(stored.date !== todayKey){ rev = 0; } // reset if new day
-    rev++;
-    localStorage.setItem('revisionState', JSON.stringify({date:todayKey, rev}));
-
-    document.getElementById('headerBuild').textContent = `UPDATED: ${timeStr} | BUILD: V${buildDate} | R ${rev}`;
+    document.getElementById('headerBuild').textContent = `UPDATED: ${timeStr} | BUILD: V${buildDate} | R ${BUILD_META.revision}`;
   }
 }
 
