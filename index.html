@@ -1322,6 +1322,22 @@ const MATERIALS = [
     tel: "086-341-9410",
     dates: []
   },
+  {
+    name: "Door Frame",
+    category: "Architecture",
+    supplier: "Kriang Charoen Company Limited",
+    contact: "K. Parita",
+    tel: "092-942-6466",
+    dates: [
+      { date: "2026-04-21", qty: "", note: "FL 2A/2B" },
+      { date: "2026-04-27", qty: "", note: "FL 3A/3B" },
+      { date: "2026-05-10", qty: "", note: "FL 4A/4B" },
+      { date: "2026-05-17", qty: "", note: "FL 5A/5B" },
+      { date: "2026-05-30", qty: "", note: "FL 6A/6B" },
+      { date: "2026-06-01", qty: "", note: "FL 7A/7B" },
+      { date: "2026-06-01", qty: "", note: "FL 8A/8B" },
+    ]
+  },
 ];
 
 /* ═══════════════════════════════════════════════════════════
@@ -1606,21 +1622,12 @@ function buildMasterCalendar(mats){
     dateToCount[ds] = (dateToCount[ds] || 0) + 1;
   });
 
-  // Group by month
+  // Show all 12 months of 2026
   const months = [];
-  Object.keys(dateToCount).forEach(ds => {
-    const d = new Date(ds + 'T00:00:00');
-    const key = d.getFullYear() + '-' + d.getMonth();
-    if(!months.find(m => m.key === key)){
-      months.push({ key, year: d.getFullYear(), month: d.getMonth() });
-    }
-  });
-  // Include current month if not present
-  const todayKey = today.getFullYear() + '-' + today.getMonth();
-  if(!months.find(m => m.key === todayKey)){
-    months.unshift({ key: todayKey, year: today.getFullYear(), month: today.getMonth() });
+  for(let m = 0; m < 12; m++){
+    const key = '2026-' + m;
+    months.push({ key, year: 2026, month: m });
   }
-  months.sort((a,b) => a.year !== b.year ? a.year - b.year : a.month - b.month);
 
   const calHtml = `<div class="cal-strip">${months.map(({year, month}) => {
     const daysInMonth = new Date(year, month+1, 0).getDate();
