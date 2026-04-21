@@ -581,8 +581,13 @@
       border-radius: 4px; color: var(--muted); cursor: default;
     }
     .cal-day.has-delivery {
-      background: rgba(201,168,76,.2); color: var(--gold);
-      font-weight: 700; border: 1px solid var(--gold-d);
+      background: rgba(61,190,124,.25); color: var(--green);
+      font-weight: 700; border: 1px solid rgba(61,190,124,.5);
+      animation: deliveryPulse 2s ease-in-out infinite;
+    }
+    @keyframes deliveryPulse {
+      0%, 100% { background: rgba(61,190,124,.25); }
+      50% { background: rgba(61,190,124,.4); }
     }
     .cal-day.today-mark {
       background: rgba(61,190,124,.15); color: var(--green);
