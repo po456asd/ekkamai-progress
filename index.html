@@ -478,6 +478,13 @@
       background: linear-gradient(135deg, var(--gold-d), var(--gold));
       color: #08050a; border-color: var(--gold);
     }
+    .mat-filter.site-visit {
+      border-color: rgba(52,152,219,.5); color: #3498db;
+    }
+    .mat-filter.site-visit.active {
+      background: linear-gradient(135deg, rgba(52,152,219,.6), rgba(52,152,219,.8));
+      color: #fff; border-color: #3498db;
+    }
     .mat-filter:hover:not(.active) { border-color: var(--gold-d); color: var(--text); }
     .mat-cat-header {
       font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
@@ -573,8 +580,8 @@
       display: grid; grid-template-columns: repeat(7,1fr); gap: 2px;
     }
     .cal-day-hdr {
-      font-size: 8px; color: var(--dim); text-align: center;
-      padding: 2px 0; letter-spacing: .5px;
+      font-size: 8px; color: #fff; text-align: center;
+      padding: 2px 0; letter-spacing: .5px; font-weight: 700;
     }
     .cal-day {
       font-size: 9px; text-align: center; padding: 4px 2px;
@@ -598,6 +605,15 @@
     }
     .cal-day.sunday {
       background: rgba(192,57,43,.12); color: #e05a4a;
+    }
+    .cal-day.has-event {
+      background: rgba(52,152,219,.3); color: #3498db;
+      font-weight: 700; border: 1px solid rgba(52,152,219,.5);
+      animation: eventPulse 3s ease-in-out infinite;
+    }
+    @keyframes eventPulse {
+      0%, 100% { background: rgba(52,152,219,.3); }
+      50% { background: rgba(52,152,219,.5); }
     }
     .cal-day.empty { opacity: 0; }
 
@@ -670,6 +686,22 @@
     }
     .mat-day-supplier-status.future {
       background: rgba(255,255,255,.05); color: var(--muted);
+    }
+    .mat-day-event {
+      background: rgba(52,152,219,.15); border: 1px solid rgba(52,152,219,.3);
+      border-radius: 10px; padding: 12px 14px; margin-bottom: 12px;
+    }
+    .mat-day-event-title {
+      font-size: 13px; font-weight: 700; color: #3498db;
+      margin-bottom: 6px;
+    }
+    .mat-day-event-detail {
+      font-size: 10px; color: var(--text); line-height: 1.4;
+      margin-bottom: 6px; padding: 6px 0; border-top: 1px solid rgba(52,152,219,.2);
+      padding-top: 6px;
+    }
+    .mat-day-event-attendees {
+      font-size: 11px; color: var(--muted); line-height: 1.6;
     }
 
     /* ── FOOTER ── */
@@ -1062,6 +1094,13 @@ const BUILD_META = {
 };
 
 /* ═══════════════════════════════════════════════════════════
+   SITE VISITS & EVENTS
+═══════════════════════════════════════════════════════════ */
+const EVENTS = [
+  { date: "2026-04-24", type: "site-visit", title: "Site Visit", detail: "Check example light on 2B Floor ceiling light", attendees: ["K Bee", "K Note", "K Atin"] }
+];
+
+/* ═══════════════════════════════════════════════════════════
    PROJECT DATA — Edit these values each week
    All values are percentages (0–100)
    Floors: B=Basement, 1–8=Floors, R=Roof (Bldg A only)
@@ -1347,6 +1386,16 @@ const MATERIALS = [
       { date: "2026-06-01", qty: "", note: "FL 8A/8B" },
     ]
   },
+  {
+    name: "Site Material Delivery",
+    category: "MEP",
+    supplier: "Wanroot Team",
+    contact: "K Pah",
+    tel: "Placeholder",
+    dates: [
+      { date: "2026-04-24", qty: "", note: "On-site delivery" }
+    ]
+  },
 ];
 
 /* ═══════════════════════════════════════════════════════════
@@ -1571,7 +1620,10 @@ window.showDayDetails = function(dateStr){
     }
   });
 
-  if(suppliers.length === 0){
+  // Check for events on this date
+  const evt = EVENTS.find(e => e.date === dateStr);
+
+  if(suppliers.length === 0 && !evt){
     document.getElementById('matDayDetails').style.display = 'none';
     return;
   }
@@ -1579,6 +1631,16 @@ window.showDayDetails = function(dateStr){
   // Format date display
   const d = new Date(dateStr + 'T00:00:00');
   const dateDisplay = `${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()} (${DAYS[d.getDay()]})`;
+
+  const eventHtml = evt ? `
+    <div class="mat-day-event">
+      <div class="mat-day-event-title">${evt.title}</div>
+      ${evt.detail ? `<div class="mat-day-event-detail">${evt.detail}</div>` : ''}
+      <div class="mat-day-event-attendees">
+        <strong>Attendees:</strong> ${evt.attendees.join(', ')}
+      </div>
+    </div>
+  ` : '';
 
   const supplierHtml = suppliers.map(s => `
     <div class="mat-day-supplier">
@@ -1598,6 +1660,7 @@ window.showDayDetails = function(dateStr){
         <button class="mat-day-details-close" onclick="document.getElementById('matDayDetails').style.display='none'">✕</button>
       </div>
       <div class="mat-day-details-list">
+        ${eventHtml}
         ${supplierHtml}
       </div>
     </div>
@@ -1650,13 +1713,14 @@ function buildMasterCalendar(mats){
       }).map(ds => new Date(ds + 'T00:00:00').getDate())
     );
 
-    let cells = '<div class="cal-day-hdr">M</div><div class="cal-day-hdr">T</div><div class="cal-day-hdr">W</div><div class="cal-day-hdr">T</div><div class="cal-day-hdr">F</div><div class="cal-day-hdr">S</div><div class="cal-day-hdr">S</div>';
+    let cells = '<div class="cal-day-hdr">M</div><div class="cal-day-hdr">T</div><div class="cal-day-hdr">W</div><div class="cal-day-hdr">T</div><div class="cal-day-hdr">F</div><div class="cal-day-hdr">SA</div><div class="cal-day-hdr">SU</div>';
     for(let i=0;i<firstDay;i++) cells += '<div class="cal-day empty">·</div>';
 
     for(let d=1;d<=daysInMonth;d++){
       const dateStr = year + '-' + String(month+1).padStart(2,'0') + '-' + String(d).padStart(2,'0');
       let cls = 'cal-day';
       const count = dateToCount[dateStr];
+      const evt = EVENTS.find(e => e.date === dateStr);
 
       // Check if this is today
       const isToday = today.getFullYear() === year && today.getMonth() === month && today.getDate() === d;
@@ -1668,12 +1732,17 @@ function buildMasterCalendar(mats){
       if(count){
         cls += ' has-delivery';
       }
+      if(evt){
+        cls += ' has-event';
+      }
       if(isToday){
         cls += ' today-mark';
       }
 
       if(count){
         cells += `<div class="${cls}" style="cursor:pointer" onclick="showDayDetails('${dateStr}')"><span>${d}</span><span class="mat-mc-count">${count}</span></div>`;
+      } else if(evt){
+        cells += `<div class="${cls}" style="cursor:pointer" onclick="showDayDetails('${dateStr}')">${d}</div>`;
       } else {
         cells += `<div class="${cls}">${d}</div>`;
       }
@@ -1761,11 +1830,11 @@ function renderMaterials(){
   }
 
   // Build filter buttons
-  const allCats = ['All', ...new Set(MATERIALS.map(m => m.category))];
+  const allCats = ['All', 'Site Visit', ...new Set(MATERIALS.map(m => m.category))];
   let activeCat = 'All';
   function buildFilters(){
     document.getElementById('matFilters').innerHTML = allCats.map(c =>
-      `<button class="mat-filter${c===activeCat?' active':''}" onclick="setMatFilter('${c}')">${c}</button>`
+      `<button class="mat-filter${c===activeCat?' active':''} ${c==='Site Visit'?'site-visit':''}" onclick="setMatFilter('${c}')">${c}</button>`
     ).join('');
   }
   window.setMatFilter = function(cat){
@@ -1775,8 +1844,47 @@ function renderMaterials(){
   };
 
   function buildMasterCalendarAndList(){
-    const filtered = activeCat === 'All' ? MATERIALS : MATERIALS.filter(m=>m.category===activeCat);
-    document.getElementById('matMasterCal').innerHTML = buildMasterCalendar(filtered);
+    let filtered;
+    if(activeCat === 'All'){
+      filtered = MATERIALS;
+      document.getElementById('matMasterCal').innerHTML = buildMasterCalendar(filtered);
+    } else if(activeCat === 'Site Visit'){
+      // Show events calendar instead
+      const DAYS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+      const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+      const months = [];
+      for(let m = 0; m < 12; m++){
+        months.push({ year: 2026, month: m });
+      }
+      const calHtml = `<div class="cal-strip">${months.map(({year, month}) => {
+        const daysInMonth = new Date(year, month+1, 0).getDate();
+        const firstDay = (new Date(year, month, 1).getDay() + 6) % 7;
+        const eventDays = new Set(EVENTS.filter(e => {
+          const d = new Date(e.date + 'T00:00:00');
+          return d.getFullYear() === year && d.getMonth() === month;
+        }).map(e => new Date(e.date + 'T00:00:00').getDate()));
+        let cells = '<div class="cal-day-hdr">M</div><div class="cal-day-hdr">T</div><div class="cal-day-hdr">W</div><div class="cal-day-hdr">T</div><div class="cal-day-hdr">F</div><div class="cal-day-hdr">SA</div><div class="cal-day-hdr">SU</div>';
+        for(let i=0;i<firstDay;i++) cells += '<div class="cal-day empty">·</div>';
+        for(let d=1;d<=daysInMonth;d++){
+          const dateStr = year + '-' + String(month+1).padStart(2,'0') + '-' + String(d).padStart(2,'0');
+          let cls = 'cal-day';
+          const hasEvent = eventDays.has(d);
+          if(hasEvent) cls += ' has-event';
+          const isSunday = new Date(year, month, d).getDay() === 0;
+          if(isSunday) cls += ' sunday';
+          if(hasEvent){
+            cells += `<div class="${cls}" style="cursor:pointer" onclick="showDayDetails('${dateStr}')">${d}</div>`;
+          } else {
+            cells += `<div class="${cls}">${d}</div>`;
+          }
+        }
+        return `<div class="cal-month"><div class="cal-month-name">${MONTHS[month]} ${year}</div><div class="cal-grid">${cells}</div></div>`;
+      }).join('')}</div>`;
+      document.getElementById('matMasterCal').innerHTML = `<div class="mat-master-cal"><div class="sec-head"><div class="sec-title">Site Visit Events</div><div class="sec-sub">Scheduled events · ${EVENTS.length} event(s)</div></div>${calHtml}</div>`;
+    } else {
+      filtered = MATERIALS.filter(m=>m.category===activeCat);
+      document.getElementById('matMasterCal').innerHTML = buildMasterCalendar(filtered);
+    }
     buildMatList();
   }
 
@@ -1795,6 +1903,11 @@ function renderMaterials(){
   </div>`).join('');
 
   function buildMatList(){
+    // Site Visit shows events, not materials
+    if(activeCat === 'Site Visit'){
+      document.getElementById('matList').innerHTML = `<div style="text-align:center;padding:24px;color:var(--dim);font-style:italic">Site Visit events displayed above · No material deliveries</div>`;
+      return;
+    }
     const filtered = activeCat === 'All' ? MATERIALS : MATERIALS.filter(m=>m.category===activeCat);
     // Group by category
     const groups = {};
