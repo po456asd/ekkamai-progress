@@ -85,10 +85,10 @@ const DATA = {
             flooring:100, walls:100, stairs:0, arc:100, int:10, skim:81, elec_done:100, elec_test:0, hvac_done:85, hvac_test:0, water_done:100, water_test:100, fire_done:0, fire_test:0  },
       1:  { label:"Floor 1",
             spaces:["Shop 1","Lobby","Office 1","Office 2","Staff Locker","Staff Toilet","Landscape","Parking","Toilet 1","Toilet 2","Toilet 3","Toilet 4","Toilet 5"],
-            flooring:100, walls:100, stairs:0, arc:0, int:0, skim:0, elec_done:0, elec_test:0, hvac_done:0, hvac_test:0, water_done:0, water_test:0, fire_done:0, fire_test:0  },
+            flooring:100, walls:100, stairs:100, arc:0, int:0, skim:0, elec_done:0, elec_test:0, hvac_done:0, hvac_test:0, water_done:0, water_test:0, fire_done:0, fire_test:0  },
       B:  { label:"Basement", isBasement:true,
             spaces:["Parking Lot","Shop 2","Shop 3","All Day Dining","Kitchen"],
-            flooring:100, walls:100, stairs:0, arc:0, int:0, skim:0, elec_done:0, elec_test:0, hvac_done:0, hvac_test:0, water_done:0, water_test:0, fire_done:0, fire_test:0  },
+            flooring:100, walls:100, stairs:100, arc:0, int:0, skim:0, elec_done:0, elec_test:0, hvac_done:0, hvac_test:0, water_done:0, water_test:0, fire_done:0, fire_test:0  },
     }
   }
 };
