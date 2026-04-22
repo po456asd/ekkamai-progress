@@ -10,7 +10,9 @@ const BUILD_META = {
    SITE VISITS & EVENTS
 ═══════════════════════════════════════════════════════════ */
 const EVENTS = [
-  { date: "2026-04-24", type: "site-visit", title: "Site Visit", detail: "Check example light on 2B Floor ceiling light", attendees: ["K Bee", "K Note", "K Atin"] }
+  { date: "2026-04-24", type: "site-visit", title: "Site Visit", detail: "Check example light on 2B Floor ceiling light", attendees: ["K Bee", "K Note", "K Atin"] },
+  { date: "2026-04-25", type: "site-meeting", title: "Site Meeting", detail: "Meeting at site 10:00 AM", attendees: ["K Johnny", "K Ball", "K Jung"] },
+  { date: "2026-04-27", type: "site-meeting", title: "Site Meeting (Rescheduled)", detail: "Rescheduled from Friday · Time TBD", attendees: [] }
 ];
 
 /* ═══════════════════════════════════════════════════════════
